@@ -2,7 +2,7 @@ import java.io.IOException
 
 import javafx.application.Platform
 import javafx.scene.canvas.Canvas
-import javafx.scene.input.KeyCode
+import javafx.scene.input.{KeyCode, MouseEvent}
 import javafx.scene.layout.Pane
 import javafx.scene.paint.Color
 import javafx.stage.FileChooser
@@ -17,6 +17,8 @@ class BoardPane(val width: Int, val height: Int, val game: Game) extends Pane {
   val pointRadius = 3
   var canWrite = true
 
+
+
   canvas.setOnMouseClicked(event => {
     if(canWrite){
     this.game.addPoint(new Vector2D(event.getX.toInt, event.getY.toInt))
@@ -25,11 +27,11 @@ class BoardPane(val width: Int, val height: Int, val game: Game) extends Pane {
   })
 
   canvas.setFocusTraversable(true)
+  canvas.setOnMouseEntered(_ => canvas.requestFocus())
 
   canvas.setOnKeyPressed(keyEvent =>{
     val keyCode = keyEvent.getCode
     if(keyCode.equals(KeyCode.S)){
-      println("key pressed")
       this.saveImage()
     }
   })
