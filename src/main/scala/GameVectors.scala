@@ -1,6 +1,7 @@
 import scala.collection.mutable.ListBuffer
 
 class GameVectors() {
+
   var vectors = ListBuffer[Vector2D]()
   private val rand = scala.util.Random
 
@@ -22,9 +23,14 @@ class GameVectors() {
 
   def getRandomVector: Vector2D = this.vectors(rand.nextInt(this.vectors.size))
 
-  def nextVector(fraction: Double): Vector2D = {
-    var nextVector = this.getRandomVector
-    nextVector = this.currentVector.getNextVector(nextVector, fraction)
+  def nextVector(fraction: Double, angle: Double): Vector2D = {
+    val nextInitial = this.getRandomVector
+    var nextVector = this.currentVector.getNextVector(nextInitial, fraction)
+    if(angle != 0 && nextInitial == vectors(0)) {
+      println(nextVector - currentVector)
+      println((nextVector - currentVector).rotate(angle))
+      nextVector = (nextVector - currentVector).rotate(angle) + currentVector
+    }
     this.generatedPoints.addOne(nextVector)
     this.currentVector = nextVector
     nextVector
@@ -34,5 +40,7 @@ class GameVectors() {
     this.vectors.clear()
     this.generatedPoints.clear()
   }
+
+
 
 }
