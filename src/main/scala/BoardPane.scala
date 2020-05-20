@@ -17,8 +17,6 @@ class BoardPane(val width: Int, val height: Int, val game: Game) extends Pane {
   val pointRadius = 3
   var canWrite = true
 
-
-
   canvas.setOnMouseClicked(event => {
     if(canWrite){
     this.game.addPoint(new Vector2D(event.getX.toInt, event.getY.toInt))
