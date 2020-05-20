@@ -18,7 +18,7 @@ class Vector2D(val x: Int, val y: Int) {
     math.sqrt(math.pow(this.x - other.x, 2)  + math.pow(this.y - other.y, 2)).toInt
 
   def getNextVector(other: Vector2D, fraction: Double): Vector2D = {
-    new Vector2D(((this.x + other.x) * fraction).toInt, (this.x + other.y * fraction).toInt)
+    new Vector2D(((this.x + other.x) * fraction).toInt, ((this.y + other.y) * fraction).toInt)
   }
 
   override def equals(obj: Any): Boolean = obj match {
