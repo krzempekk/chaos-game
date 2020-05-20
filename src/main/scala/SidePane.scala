@@ -75,9 +75,11 @@ class SidePane(val width:Int,val height:Int, var game: Game) extends Pane {
     button.setOnMouseClicked(event=>{
       if(button.getText.equals("Pause")){
         button.setText("Resume")
+        game.isPaused=true
       }
       else{
         button.setText("Pause")
+        game.isPaused=false
       }
     }
     )
@@ -101,6 +103,8 @@ class SidePane(val width:Int,val height:Int, var game: Game) extends Pane {
 
     button.setOnMouseClicked(event=>{
       val preset = new Presets(text)
+      this.game.startWithNew(preset.initialParameters._2,preset.initialParameters._1)
+      this.game.setStartingPoint(new Vector2D(0,600))
     })
 
     this.buttonBar.getChildren.add(button)

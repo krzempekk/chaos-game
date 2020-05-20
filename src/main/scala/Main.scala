@@ -15,7 +15,7 @@ class Main extends javafx.application.Application {
   val boardHeight = 800
   val game = new Game
   val boardPane = new BoardPane(boardWidth, boardHeight, game)
-  val sidePane = new SidePane(sidebarWidth, boardHeight, game)
+  val sidePane = new SidePane(sidebarWidth, boardHeight,game)
 
   override def start(primaryStage: Stage): Unit = {
     game.setStartingPoint(new Vector2D(300, 300))
@@ -36,9 +36,10 @@ class Main extends javafx.application.Application {
     val thread = new Thread {
       override def run(): Unit = {
         while(true) {
+          if(!game.isPaused){
           game.nextStep()
           boardPane.update()
-          Thread.sleep(30)
+          Thread.sleep(30)}
         }
       }
     }
