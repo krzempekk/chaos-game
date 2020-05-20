@@ -1,7 +1,9 @@
+import java.lang
+
 import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.event.{Event, EventHandler}
 import javafx.geometry.{Insets, Orientation, Pos}
-import javafx.scene.control.{Button, RadioButton, ChoiceBox, TextField, TextFormatter, ToggleGroup}
+import javafx.scene.control.{Button, CheckBox, ChoiceBox, RadioButton, TextField, TextFormatter, ToggleGroup}
 import javafx.scene.layout.{FlowPane, Pane, VBox}
 import javafx.scene.paint.Color
 import javafx.scene.text.{Font, Text, TextAlignment}
@@ -53,6 +55,7 @@ class SidePane(val width:Int,val height:Int, var game: Game, var boardPane: Boar
   this.addAngleOption
   this.addVertexInfo
   this.addDrawRadioButtons
+  this.addNeighbourRuleCheckbox
 
   def addAngleOption: Unit ={
     val button = new Button("Add angles")
@@ -79,7 +82,7 @@ class SidePane(val width:Int,val height:Int, var game: Game, var boardPane: Boar
       override def changed(observableValue: ObservableValue[_ <: Double], t: Double, t1: Double): Unit = {
         game.addAngle(vector,t1)
       }
-      })
+    })
     this.optionsBar.getChildren.add(text)
     this.optionsBar.getChildren.add(textField)
   }
@@ -168,6 +171,17 @@ class SidePane(val width:Int,val height:Int, var game: Game, var boardPane: Boar
     this.buttonBar.getChildren.add(button)
   }
 
+  def addNeighbourRuleCheckbox(): Unit = {
+    val checkbox = new CheckBox("Can choose previous vertex")
+    checkbox.setSelected(this.game.canReselectVertex)
+
+    checkbox.selectedProperty().addListener(new ChangeListener[lang.Boolean] {
+      override def changed(observableValue: ObservableValue[_ <: lang.Boolean], oldVal: lang.Boolean, newVal: lang.Boolean): Unit = SidePane.this.game.setCanReselectVertex(newVal)
+    })
+
+    this.buttonBar.getChildren.add(checkbox)
+  }
+
   def updateVertexChoiceBox(): Unit = {
     vertexChoiceBox.getItems.clear()
     for(vertex <- this.game.getInitialPoints) {
@@ -182,7 +196,6 @@ class SidePane(val width:Int,val height:Int, var game: Game, var boardPane: Boar
 
     this.vertexInfo.getChildren.add(vertexChoiceBox)
   }
-
 
   def addDrawRadioButtons: Unit = {
     val rbGroup = new ToggleGroup()
