@@ -7,7 +7,7 @@ import javafx.scene.layout.{FlowPane, Pane}
 import javafx.scene.text.{Font, Text, TextAlignment}
 import javafx.util.StringConverter
 
-class SidePane(val width:Int,val height:Int, var game: Game) extends Pane {
+class SidePane(val width:Int,val height:Int, var game: Game, var boardPane: BoardPane) extends Pane {
   var buttonBar = new FlowPane(Orientation.VERTICAL)
 
   buttonBar.prefWidthProperty().bind(this.prefWidthProperty())
@@ -91,7 +91,8 @@ class SidePane(val width:Int,val height:Int, var game: Game) extends Pane {
     button.getStyleClass.add("button-raised")
 
     button.setOnMouseClicked(event=>{
-
+      this.game.cleanGame()
+      this.boardPane.getChildren.clear()
     }
     )
     this.buttonBar.getChildren.add(button)
@@ -102,9 +103,11 @@ class SidePane(val width:Int,val height:Int, var game: Game) extends Pane {
     button.getStyleClass.add("button-rised")
 
     button.setOnMouseClicked(event=>{
-      val preset = new Presets(text)
+      println(this.boardPane.width,this.boardPane.height)
+      val preset = new Presets(text,this.boardPane.width,this.boardPane.height)
       this.game.startWithNew(preset.initialParameters._2,preset.initialParameters._1)
-      this.game.setStartingPoint(new Vector2D(0,600))
+      this.game.setStartingPoint(new Vector2D(this.boardPane.width/2,this.boardPane.height/2))
+      this.game.isPaused=false
     })
 
     this.buttonBar.getChildren.add(button)
