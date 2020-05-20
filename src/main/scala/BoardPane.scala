@@ -1,7 +1,16 @@
+import java.io.IOException
+
 import javafx.application.Platform
 import javafx.scene.canvas.Canvas
+import javafx.scene.input.KeyCode
 import javafx.scene.layout.Pane
 import javafx.scene.paint.Color
+import javafx.stage.FileChooser
+import javax.imageio.ImageIO
+import scalafx.embed.swing.SwingFXUtils
+import scalafx.scene.image.WritableImage
+
+
 
 class BoardPane(val width: Int, val height: Int, val game: Game) extends Pane {
   val canvas = new Canvas(width, height)
@@ -12,6 +21,16 @@ class BoardPane(val width: Int, val height: Int, val game: Game) extends Pane {
     if(canWrite){
     this.game.addPoint(new Vector2D(event.getX.toInt, event.getY.toInt))
     this.update()
+    }
+  })
+
+  canvas.setFocusTraversable(true)
+
+  canvas.setOnKeyPressed(keyEvent =>{
+    val keyCode = keyEvent.getCode
+    if(keyCode.equals(KeyCode.S)){
+      println("key pressed")
+      this.saveImage()
     }
   })
 
@@ -37,4 +56,26 @@ class BoardPane(val width: Int, val height: Int, val game: Game) extends Pane {
   }
 
   def update(): Unit = this.layoutChildren()
+
+  def saveImage(): Unit = {
+    val fileChooser = new FileChooser()
+
+    fileChooser.getExtensionFilters.add(new FileChooser.ExtensionFilter("png files (*.png)", "*.png"))
+
+    val file = fileChooser.showSaveDialog(null)
+
+    if(file != null){
+      try{
+        val writableImage = new WritableImage(800, 800)
+        snapshot(null, writableImage)
+        val renderedImage = SwingFXUtils.fromFXImage(writableImage, null)
+
+        ImageIO.write(renderedImage, "png", file)
+      }
+      catch {
+        case ex: IOException => ex.printStackTrace()
+        case _: Throwable => println("Exception")
+      }
+    }
+  }
 }
