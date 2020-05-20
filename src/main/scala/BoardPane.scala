@@ -25,9 +25,9 @@ class BoardPane(val width: Int, val height: Int, val game: Game) extends Pane {
       gc.clearRect(0, 0, width, height)
 
       gc.setFill(Color.RED)
-      for (point <- game.initialPoints.getList) gc.fillOval(point.x, point.y, this.pointRadius, this.pointRadius)
+      for (point <- game.getInitailPoints) gc.fillOval(point.x, point.y, this.pointRadius, this.pointRadius)
       gc.setFill(Color.WHITE)
-      for (point <- game.generatedPoints) gc.fillOval(point.x, point.y, this.pointRadius, this.pointRadius)
+      for (point <- game.getGeneratedPoints) gc.fillOval(point.x, point.y, this.pointRadius, this.pointRadius)
     })
   }
 
