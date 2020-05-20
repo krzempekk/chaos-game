@@ -25,9 +25,10 @@ class Game {
 
   def getGeneratedPoints: List[Vector2D] = gameVectors.getGeneratedList
 
-  def startWithNew(newVectors: GameVectors, newMultiplier: Double): Unit = {
+  def startWithNew(newVectors: GameVectors, newMultiplier: Double, canReselectVertex: Boolean): Unit = {
     this.gameVectors.clear()
     this.gameVectors = newVectors
     this.multiplier = newMultiplier
+    this.setCanReselectVertex(canReselectVertex)
   }
 }

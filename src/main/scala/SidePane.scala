@@ -84,18 +84,17 @@ class SidePane(val width:Int,val height:Int, var game: Game, var boardPane: Boar
     button.setOnMouseClicked(event=>{
       this.game.cleanGame()
       this.boardPane.canvas.getGraphicsContext2D.clearRect(0,0,this.boardPane.canvas.getWidth,this.boardPane.canvas.getHeight)
-    }
-    )
+    })
     this.buttonBar.getChildren.add(button)
   }
 
   def addOptionButton(text: String): Unit = {
     val button = new Button(text)
-    button.getStyleClass.add("button-rised")
+    button.getStyleClass.add("button-raised")
 
     button.setOnMouseClicked(event=>{
       val preset = new Presets(text,this.boardPane.width,this.boardPane.height)
-      this.game.startWithNew(preset.initialParameters._2,preset.initialParameters._1)
+      this.game.startWithNew(preset.initialParameters._2, preset.initialParameters._1, preset.initialParameters._3)
       this.game.setStartingPoint(new Vector2D(this.boardPane.width/2,this.boardPane.height/2))
       this.game.isPaused=false
       this.boardPane.canWrite = false
