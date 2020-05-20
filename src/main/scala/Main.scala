@@ -1,5 +1,5 @@
-import javafx.application.Application
-import javafx.stage.Stage
+import javafx.application.{Application, Platform}
+import javafx.stage.{Stage, WindowEvent}
 import javafx.scene.Scene
 import javafx.scene.layout._
 
@@ -23,6 +23,11 @@ class Main extends javafx.application.Application {
     game.addPoint(new Vector2D(500, 100))
     game.addPoint(new Vector2D(100, 100))
     val root = new HBox(boardPane, sidePane)
+
+    primaryStage.setOnCloseRequest((_: WindowEvent) => {
+      Platform.exit()
+      System.exit(0)
+    })
 
     primaryStage.setTitle("Chaos Game")
     val primaryScene = new Scene(root, this.boardWidth + this.sidebarWidth, this.boardHeight)
