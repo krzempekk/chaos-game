@@ -1,11 +1,9 @@
-import java.util.function.UnaryOperator
-import java.util.regex.Pattern
-
+import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.geometry.{Insets, Orientation, Pos}
 import javafx.scene.control.{Button, TextField, TextFormatter}
 import javafx.scene.layout.{FlowPane, Pane}
 import javafx.scene.text.{Font, Text, TextAlignment}
-import javafx.util.StringConverter
+import scalafx.util.converter.DoubleStringConverter
 
 class SidePane(val width:Int,val height:Int, var game: Game, var boardPane: BoardPane) extends Pane {
   var buttonBar = new FlowPane(Orientation.VERTICAL)
@@ -40,29 +38,22 @@ class SidePane(val width:Int,val height:Int, var game: Game, var boardPane: Boar
     button.getStyleClass.add("button-raised")
 
     button.setOnMouseClicked(event=> {
-      val validEditingState = Pattern.compile("-?(([1-9][0-9]*)|0)?(\\.[0-9]*)?")
-
-      val filter:UnaryOperator[TextFormatter.Change] = c => {
-        var text = c.getControlNewText
-        if(validEditingState.matcher(text).matches()){
-           return c
-        }
-        else return null
-      }
-
-      val converter = new StringConverter[Double]() {
-        def fromString(s: String): Double =
-          if (s.isEmpty || "-" == s || "." == s || "-." == s) 0.0
-          else s.toDouble
-
-        def toString(d: Double): String = d.toString
-      }
-
-      val textFormatter = new TextFormatter[Double](converter,0.5,filter)
+      val textFormatter = new TextFormatter[Double](new DoubleStringConverter(),0d)
       val textField = new TextField()
       textField.setTextFormatter(textFormatter)
 
+      textFormatter.valueProperty().addListener(new ChangeListener[Double] {
+        override def changed(observableValue: ObservableValue[_ <: Double], t: Double, t1: Double): Unit = {
+          if(!t1.equals(0.0) && game.gameVectors.vectors.nonEmpty){
+            game.multiplier = t1
+            game.isPaused = false
+            boardPane.canWrite = false
+          }
+        }
+      })
+
       this.buttonBar.getChildren.add(textField)
+
     }
     )
     this.buttonBar.getChildren.add(button)
@@ -92,7 +83,7 @@ class SidePane(val width:Int,val height:Int, var game: Game, var boardPane: Boar
 
     button.setOnMouseClicked(event=>{
       this.game.cleanGame()
-      this.boardPane.getChildren.clear()
+      this.boardPane.canvas.getGraphicsContext2D.clearRect(0,0,this.boardPane.canvas.getWidth,this.boardPane.canvas.getHeight)
     }
     )
     this.buttonBar.getChildren.add(button)
@@ -103,11 +94,11 @@ class SidePane(val width:Int,val height:Int, var game: Game, var boardPane: Boar
     button.getStyleClass.add("button-rised")
 
     button.setOnMouseClicked(event=>{
-      println(this.boardPane.width,this.boardPane.height)
       val preset = new Presets(text,this.boardPane.width,this.boardPane.height)
       this.game.startWithNew(preset.initialParameters._2,preset.initialParameters._1)
       this.game.setStartingPoint(new Vector2D(this.boardPane.width/2,this.boardPane.height/2))
       this.game.isPaused=false
+      this.boardPane.canWrite = false
     })
 
     this.buttonBar.getChildren.add(button)
