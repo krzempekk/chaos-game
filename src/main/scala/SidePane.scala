@@ -1,6 +1,7 @@
 import javafx.beans.value.{ChangeListener, ObservableValue}
-import javafx.geometry.{Insets, Pos}
-import javafx.scene.control.{Button, TextField, TextFormatter}
+import javafx.event.{Event, EventHandler}
+import javafx.geometry.{Insets, Orientation, Pos}
+import javafx.scene.control.{Button, RadioButton, ChoiceBox, TextField, TextFormatter, ToggleGroup}
 import javafx.scene.layout.{FlowPane, Pane, VBox}
 import javafx.scene.paint.Color
 import javafx.scene.text.{Font, Text, TextAlignment}
@@ -9,8 +10,11 @@ import scalafx.util.converter.DoubleStringConverter
 class SidePane(val width:Int,val height:Int, var game: Game, var boardPane: BoardPane) extends FlowPane {
   var buttonBar = new VBox()
   var optionsBar = new VBox()
+  var vertexInfo = new VBox()
   var wrapper = new VBox()
+  val vertexChoiceBox = new ChoiceBox[Vector2D]()
   var numOfPoints = 0
+  var editedVertex: Option[Vector2D] = None
 
   this.setPadding(new Insets(20,0,0,30))
 
@@ -29,10 +33,13 @@ class SidePane(val width:Int,val height:Int, var game: Game, var boardPane: Boar
 
   VBox.setMargin(optionsBar, new Insets(0,0,0,40))
 
+  vertexInfo.prefWidthProperty().bind(this.prefWidthProperty())
+  vertexInfo.setAlignment(Pos.CENTER)
+
   wrapper.setSpacing(10)
 
   buttonBar.setPadding(new Insets(0, 0, 0, 30))
-  wrapper.getChildren.addAll(buttonBar,optionsBar)
+  wrapper.getChildren.addAll(buttonBar, optionsBar, vertexInfo)
   this.getChildren.add(this.wrapper)
 
   this.addPauseButton(game.isPaused)
@@ -41,8 +48,11 @@ class SidePane(val width:Int,val height:Int, var game: Game, var boardPane: Boar
   this.addOptionButton("Rectangular")
   this.addOptionButton("Pentagon")
   this.addOptionButton("Vicsek")
+  this.addOptionButton("Carpet")
   this.addOwnOptions
   this.addAngleOption
+  this.addVertexInfo
+  this.addDrawRadioButtons
 
   def addAngleOption: Unit ={
     val button = new Button("Add angles")
@@ -147,14 +157,50 @@ class SidePane(val width:Int,val height:Int, var game: Game, var boardPane: Boar
     val button = new Button(text)
     button.getStyleClass.add("button-raised")
 
-    button.setOnMouseClicked(event=>{
-      val preset = new Presets(text,this.boardPane.width,this.boardPane.height)
+    button.setOnMouseClicked(event => {
+      val preset = new Presets(text, this.boardPane.width, this.boardPane.height)
       this.game.startWithNew(preset.initialParameters._2, preset.initialParameters._1, preset.initialParameters._3)
       this.game.setStartingPoint(new Vector2D(this.boardPane.width/2,this.boardPane.height/2))
-      this.game.isPaused=false
+      this.game.isPaused = false
       this.boardPane.canWrite = false
     })
 
     this.buttonBar.getChildren.add(button)
+  }
+
+  def updateVertexChoiceBox(): Unit = {
+    vertexChoiceBox.getItems.clear()
+    for(vertex <- this.game.getInitialPoints) {
+      vertexChoiceBox.getItems.add(vertex)
+    }
+  }
+
+  def addVertexInfo: Unit = {
+    vertexChoiceBox.onActionProperty().setValue((t: Event) => {
+      editedVertex = Some(t.getTarget.asInstanceOf[ChoiceBox[Vector2D]].getValue)
+    })
+
+    this.vertexInfo.getChildren.add(vertexChoiceBox)
+  }
+
+
+  def addDrawRadioButtons: Unit = {
+    val rbGroup = new ToggleGroup()
+
+    val startingPointButton = new RadioButton("Adding starting point")
+    startingPointButton.setToggleGroup(rbGroup)
+    startingPointButton.setOnMouseClicked(event =>{
+      this.game.addingStartingPoint = !this.game.addingStartingPoint
+    })
+
+    val vertexButton = new RadioButton("Adding vertex")
+    vertexButton.setToggleGroup(rbGroup)
+    vertexButton.setSelected(this.game.addingStartingPoint)
+    vertexButton.setOnMouseClicked(event =>{
+      this.game.addingStartingPoint = !this.game.addingStartingPoint
+    })
+
+    this.buttonBar.getChildren.add(startingPointButton)
+    this.buttonBar.getChildren.add(vertexButton)
   }
 }

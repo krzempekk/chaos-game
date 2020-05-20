@@ -19,9 +19,9 @@ class BoardPane(val width: Int, val height: Int, val game: Game) extends Pane {
   private val rand = scala.util.Random
 
   canvas.setOnMouseClicked(event => {
-    if(canWrite){
-    this.game.addPoint(new Vector2D(event.getX.toInt, event.getY.toInt))
-    this.update()
+    if(canWrite) {
+      this.game.addPoint(new Vector2D(event.getX.toInt, event.getY.toInt))
+      this.update()
     }
   })
 

@@ -8,7 +8,6 @@ class GameVectors(var canReselectVertex: Boolean = true) {
   var generatedPoints: ListBuffer[Vector2D] = ListBuffer[Vector2D]()
 
   var multiplier = 0.5
-  var angle = 0
 
   var currentVertex = new Vector2D(0, 0)
   var currentPoint = new Vector2D(0, 0)
