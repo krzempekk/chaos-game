@@ -1,13 +1,13 @@
 import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.event.{Event, EventHandler}
 import javafx.geometry.{Insets, Orientation, Pos}
-import javafx.scene.control.{Button, ChoiceBox, RadioButton, TextField, TextFormatter, ToggleGroup}
+import javafx.scene.control.{Button, RadioButton, ChoiceBox, TextField, TextFormatter, ToggleGroup}
 import javafx.scene.layout.{FlowPane, Pane, VBox}
 import javafx.scene.paint.Color
 import javafx.scene.text.{Font, Text, TextAlignment}
-import scalafx.util.converter.{DoubleStringConverter, IntStringConverter}
+import scalafx.util.converter.DoubleStringConverter
 
-class SidePane(val width: Int, val height: Int, var game: Game, var boardPane: BoardPane) extends Pane {
+class SidePane(val width:Int,val height:Int, var game: Game, var boardPane: BoardPane) extends FlowPane {
   var buttonBar = new VBox()
   var optionsBar = new VBox()
   var vertexInfo = new VBox()
@@ -16,13 +16,22 @@ class SidePane(val width: Int, val height: Int, var game: Game, var boardPane: B
   var numOfPoints = 0
   var editedVertex: Option[Vector2D] = None
 
+  this.setPadding(new Insets(20,0,0,30))
+
+  this.addTextLabel("Choose one of prepared options", 15)
+  this.addTextLabel("or pick few points by your own",15)
+
   buttonBar.prefWidthProperty().bind(this.prefWidthProperty())
   buttonBar.setAlignment(Pos.CENTER)
   buttonBar.setSpacing(10)
 
+  VBox.setMargin(buttonBar, new Insets(40))
+
   optionsBar.prefWidthProperty().bind(this.prefWidthProperty())
   optionsBar.setAlignment(Pos.CENTER)
   optionsBar.setSpacing(5)
+
+  VBox.setMargin(optionsBar, new Insets(0,0,0,40))
 
   vertexInfo.prefWidthProperty().bind(this.prefWidthProperty())
   vertexInfo.setAlignment(Pos.CENTER)
@@ -33,13 +42,13 @@ class SidePane(val width: Int, val height: Int, var game: Game, var boardPane: B
   wrapper.getChildren.addAll(buttonBar, optionsBar, vertexInfo)
   this.getChildren.add(this.wrapper)
 
-  this.addTextLabel("Choose one of prepared options", 15)
-  this.addTextLabel("or pick few points by your own",15)
   this.addPauseButton(game.isPaused)
   this.addResetButton
   this.addOptionButton("Sierpinsky")
   this.addOptionButton("Rectangular")
   this.addOptionButton("Pentagon")
+  this.addOptionButton("Vicsek")
+  this.addOptionButton("Carpet")
   this.addOwnOptions
   this.addAngleOption
   this.addVertexInfo
@@ -81,7 +90,7 @@ class SidePane(val width: Int, val height: Int, var game: Game, var boardPane: B
     textLabel.setTextAlignment(TextAlignment.CENTER)
     textLabel.setFill(Color.CORNFLOWERBLUE)
     textLabel.wrappingWidthProperty.bind(this.prefWidthProperty)
-    this.buttonBar.getChildren.add(textLabel)
+    this.wrapper.getChildren.add(textLabel)
   }
 
   def addOwnOptions: Unit ={
