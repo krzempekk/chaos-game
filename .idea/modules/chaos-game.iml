@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module external.linked.project.id="chaos-game [file:/home/sans/studia/chaos-game/]" external.linked.project.path="$MODULE_DIR$/../.." external.root.project.path="$MODULE_DIR$/../.." external.system.id="SBT" type="JAVA_MODULE" version="4">
-  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_13">
+<module external.linked.project.id="chaos-game [file:/C:/Users/kicaj/Documents/scala%20projekt/chaos-game/]" external.linked.project.path="$MODULE_DIR$/../.." external.root.project.path="$MODULE_DIR$/../.." external.system.id="SBT" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_11">
     <output url="file://$MODULE_DIR$/../../target/scala-2.13/classes" />
     <output-test url="file://$MODULE_DIR$/../../target/scala-2.13/test-classes" />
     <exclude-output />
@@ -12,19 +12,13 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="sbt: org.openjfx:javafx-base:11:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.openjfx:javafx-base:11:linux:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.openjfx:javafx-controls:11:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.openjfx:javafx-controls:11:linux:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.openjfx:javafx-fxml:11:linux:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.openjfx:javafx-graphics:11:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.openjfx:javafx-graphics:11:linux:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.openjfx:javafx-media:11:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.openjfx:javafx-media:11:linux:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.openjfx:javafx-swing:11:linux:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.openjfx:javafx-web:11:linux:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.scala-lang:scala-library:2.13.2:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.scala-lang:scala-reflect:2.13.2:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.scalafx:scalafx_2.13:14-R19:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.openjfx:javafx-web:11:win:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.openjfx:javafx-swing:11:win:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.openjfx:javafx-media:11:win:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.openjfx:javafx-graphics:11:win:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.openjfx:javafx-fxml:11:win:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.openjfx:javafx-controls:11:win:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.openjfx:javafx-base:11:win:jar" level="project" />
     <orderEntry type="module-library">
       <library name="sbt: unmanaged-sources-and-docs">
         <CLASSES />
@@ -32,13 +26,26 @@
           <root url="jar://$USER_HOME$/.cache/coursier/v1/https/repo1.maven.org/maven2/org/openjfx/javafx-fxml/11/javafx-fxml-11-javadoc.jar!/" />
           <root url="jar://$USER_HOME$/.cache/coursier/v1/https/repo1.maven.org/maven2/org/openjfx/javafx-swing/11/javafx-swing-11-javadoc.jar!/" />
           <root url="jar://$USER_HOME$/.cache/coursier/v1/https/repo1.maven.org/maven2/org/openjfx/javafx-web/11/javafx-web-11-javadoc.jar!/" />
+          <root url="jar://$USER_HOME$/AppData/Local/Coursier/cache/v1/https/repo1.maven.org/maven2/org/openjfx/javafx-fxml/11/javafx-fxml-11-javadoc.jar!/" />
+          <root url="jar://$USER_HOME$/AppData/Local/Coursier/cache/v1/https/repo1.maven.org/maven2/org/openjfx/javafx-swing/11/javafx-swing-11-javadoc.jar!/" />
+          <root url="jar://$USER_HOME$/AppData/Local/Coursier/cache/v1/https/repo1.maven.org/maven2/org/openjfx/javafx-web/11/javafx-web-11-javadoc.jar!/" />
         </JAVADOC>
         <SOURCES>
           <root url="jar://$USER_HOME$/.cache/coursier/v1/https/repo1.maven.org/maven2/org/openjfx/javafx-fxml/11/javafx-fxml-11-sources.jar!/" />
           <root url="jar://$USER_HOME$/.cache/coursier/v1/https/repo1.maven.org/maven2/org/openjfx/javafx-swing/11/javafx-swing-11-sources.jar!/" />
           <root url="jar://$USER_HOME$/.cache/coursier/v1/https/repo1.maven.org/maven2/org/openjfx/javafx-web/11/javafx-web-11-sources.jar!/" />
+          <root url="jar://$USER_HOME$/AppData/Local/Coursier/cache/v1/https/repo1.maven.org/maven2/org/openjfx/javafx-fxml/11/javafx-fxml-11-sources.jar!/" />
+          <root url="jar://$USER_HOME$/AppData/Local/Coursier/cache/v1/https/repo1.maven.org/maven2/org/openjfx/javafx-swing/11/javafx-swing-11-sources.jar!/" />
+          <root url="jar://$USER_HOME$/AppData/Local/Coursier/cache/v1/https/repo1.maven.org/maven2/org/openjfx/javafx-web/11/javafx-web-11-sources.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>
+    <orderEntry type="library" name="sbt: org.scalafx:scalafx_2.13:14-R19:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.scala-lang:scala-reflect:2.13.2:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.openjfx:javafx-media:11:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.openjfx:javafx-graphics:11:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.openjfx:javafx-controls:11:jar" level="project" />
+    <orderEntry type="library" exported="" name="scala-sdk-2.13.2" level="project" />
+    <orderEntry type="library" name="com.jfoenix:jfoenix:9.0.9" level="project" />
   </component>
 </module>

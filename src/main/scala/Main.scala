@@ -10,9 +10,9 @@ object Main {
 }
 
 class Main extends javafx.application.Application {
-  val boardWidth = 1000
+  val boardWidth = 800
   val sidebarWidth = 300
-  val boardHeight = 1000
+  val boardHeight = 800
 
   override def start(primaryStage: Stage): Unit = {
     val game = new Game
