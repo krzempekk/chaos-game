@@ -24,12 +24,12 @@ class BoardPane(val width: Int, val height: Int, val game: Game) extends Pane {
       val gc = this.canvas.getGraphicsContext2D
       gc.clearRect(0, 0, width, height)
 
+      gc.setFill(Color.RED)
+      for (point <- game.initialPoints.getList) gc.fillOval(point.x, point.y, this.pointRadius, this.pointRadius)
       gc.setFill(Color.WHITE)
-      for (point <- game.gameVectors.getList) gc.fillOval(point.x, point.y, this.pointRadius, this.pointRadius)
+      for (point <- game.generatedPoints) gc.fillOval(point.x, point.y, this.pointRadius, this.pointRadius)
     })
   }
 
   def update(): Unit = this.layoutChildren()
-
-//  def run():
 }

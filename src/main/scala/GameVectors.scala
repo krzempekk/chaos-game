@@ -9,7 +9,7 @@ class GameVectors() {
 
   def -(vector2D: Vector2D): Unit = this.vectors -= vector2D
 
-  def addInitialVectors(listBuffer: ListBuffer[Vector2D]) = this.vectors=listBuffer
+  def addInitialVectors(listBuffer: ListBuffer[Vector2D]): Unit = this.vectors = listBuffer
 
   def getList: List[Vector2D] = this.vectors.toList
 

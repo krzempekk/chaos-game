@@ -35,10 +35,10 @@ class Main extends javafx.application.Application {
   def run(): Unit = {
     val thread = new Thread {
       override def run(): Unit = {
-        for(_ <- Range(1, 1000)) {
+        while(true) {
           game.nextStep()
           boardPane.update()
-          Thread.sleep(100)
+          Thread.sleep(30)
         }
       }
     }

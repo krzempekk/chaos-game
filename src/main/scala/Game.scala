@@ -1,28 +1,27 @@
+import scala.collection.mutable.ListBuffer
+
 class Game {
-  var gameVectors = new GameVectors
+  var initialPoints = new GameVectors
+  var generatedPoints: ListBuffer[Vector2D] = ListBuffer[Vector2D]()
+  //  var gameVectors = new GameVectors
   var multiplier = 0.5
   var isPaused = false
 
-  def addPoint(point: Vector2D): Unit = gameVectors + point
+  def addPoint(point: Vector2D): Unit = initialPoints + point
 
-  def setStartingPoint(point: Vector2D): Unit =
-    gameVectors.currentVector = point
+  def setStartingPoint(point: Vector2D): Unit = generatedPoints += point
 
-  def removePoint(point: Vector2D): Unit = gameVectors - point
+  def removePoint(point: Vector2D): Unit = initialPoints - point
 
-  def nextStep(): Unit = gameVectors.nextVector(multiplier)
+  def nextStep(): Unit = generatedPoints += generatedPoints.last.getNextVector(initialPoints.getRandomVector, multiplier)
 
   def cleanGame(): Unit = {
-    gameVectors.clear()
+    initialPoints.clear()
     this.isPaused = true
   }
 
-  def startWithNew(newVectors: GameVectors, newMultiplier: Double) = {
-    this.gameVectors = newVectors
+  def startWithNew(newVectors: GameVectors, newMultiplier: Double): Unit = {
+    this.initialPoints = newVectors
     this.multiplier = newMultiplier
   }
-
-
-
-
 }
