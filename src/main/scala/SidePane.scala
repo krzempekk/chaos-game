@@ -1,21 +1,17 @@
 import java.util.function.UnaryOperator
 import java.util.regex.Pattern
 
-import com.jfoenix.controls.JFXButton
-import javafx.geometry.{Insets, Pos}
-import javafx.scene.Scene
-import javafx.scene.control.{Button, Label, TextField, TextFormatter}
-import javafx.scene.layout.{Pane, StackPane}
+import javafx.geometry.{Insets, Orientation, Pos}
+import javafx.scene.control.{Button, TextField, TextFormatter}
+import javafx.scene.layout.{FlowPane, Pane}
 import javafx.scene.text.{Font, Text, TextAlignment}
 import javafx.util.StringConverter
-import scalafx.geometry.Orientation
-import scalafx.scene.layout.FlowPane
 
 class SidePane(val width:Int,val height:Int, var game: Game) extends Pane {
-  var buttonBar = new FlowPane(Orientation.Vertical)
+  var buttonBar = new FlowPane(Orientation.VERTICAL)
 
   buttonBar.prefWidthProperty().bind(this.prefWidthProperty())
-  buttonBar.setAlignment(Pos.CENTER_LEFT)
+  buttonBar.setAlignment(Pos.CENTER)
   buttonBar.setHgap(10)
   buttonBar.setVgap(10)
 
@@ -40,7 +36,7 @@ class SidePane(val width:Int,val height:Int, var game: Game) extends Pane {
   }
 
   def addOwnOptions: Unit ={
-    val button = new JFXButton("Own points")
+    val button = new Button("Own points")
     button.getStyleClass.add("button-raised")
 
     button.setOnMouseClicked(event=> {
@@ -72,8 +68,8 @@ class SidePane(val width:Int,val height:Int, var game: Game) extends Pane {
     this.buttonBar.getChildren.add(button)
   }
 
-  def addPauseButton = {
-    val button = new JFXButton("Pause")
+  def addPauseButton: Unit = {
+    val button = new Button("Pause")
     button.getStyleClass.add("button-raised")
 
     button.setOnMouseClicked(event=>{
@@ -88,8 +84,8 @@ class SidePane(val width:Int,val height:Int, var game: Game) extends Pane {
     this.buttonBar.getChildren.add(button)
   }
 
-  def addResetButton ={
-    val button = new JFXButton("Reset")
+  def addResetButton: Unit ={
+    val button = new Button("Reset")
     button.getStyleClass.add("button-raised")
 
     button.setOnMouseClicked(event=>{
@@ -100,7 +96,7 @@ class SidePane(val width:Int,val height:Int, var game: Game) extends Pane {
   }
 
   def addOptionButton(text: String): Unit = {
-    val button = new JFXButton(text)
+    val button = new Button(text)
     button.getStyleClass.add("button-rised")
 
     button.setOnMouseClicked(event=>{
