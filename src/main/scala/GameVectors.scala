@@ -1,3 +1,4 @@
+import scala.collection.immutable.HashMap
 import scala.collection.mutable.ListBuffer
 
 class GameVectors(var canReselectVertex: Boolean = true) {
@@ -12,11 +13,16 @@ class GameVectors(var canReselectVertex: Boolean = true) {
   var currentVertex = new Vector2D(0, 0)
   var currentPoint = new Vector2D(0, 0)
 
+  var anglesByVertices: HashMap[Vector2D, Double] = HashMap[Vector2D, Double]()
+
+
   def +(vector2D: Vector2D): Unit = this.vertices += vector2D
 
   def -(vector2D: Vector2D): Unit = this.vertices -= vector2D
 
-  def addInitialVectors(listBuffer: ListBuffer[Vector2D]): Unit = this.vertices = listBuffer
+  def addInitialVectors(listBuffer: ListBuffer[Vector2D]): Unit = {
+    this.vertices = listBuffer
+  }
 
   def getInitialList: List[Vector2D] = this.vertices.toList
 
@@ -33,8 +39,8 @@ class GameVectors(var canReselectVertex: Boolean = true) {
   def nextVector(): Unit = {
     val nextVertex = this.getRandomVertex
     var nextPoint = this.currentPoint.getNextVector(nextVertex, multiplier)
-    if(nextVertex == this.vertices(0)) {
-      nextPoint = (nextPoint - this.vertices(0)).rotate(angle) + this.vertices(0)
+    if(this.anglesByVertices.contains(nextVertex)) {
+      nextPoint = (nextPoint - this.vertices(0)).rotate(this.anglesByVertices(nextVertex)) + this.vertices(0)
     }
     this.generatedPoints.addOne(nextPoint)
     this.currentVertex = nextVertex
@@ -46,6 +52,8 @@ class GameVectors(var canReselectVertex: Boolean = true) {
     this.generatedPoints.clear()
   }
 
-
+  def addAngle(point: Vector2D, angle: Double): Unit = {
+    this.anglesByVertices = this.anglesByVertices + (point -> angle)
+  }
 
 }

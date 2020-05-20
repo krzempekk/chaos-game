@@ -32,4 +32,5 @@ class Game {
 
   def setMultiplier(newMultiplier: Double):Unit = this.gameVectors.multiplier = newMultiplier
 
+  def addAngle(point: Vector2D, angle: Double): Unit = this.addAngle(point, angle)
 }
