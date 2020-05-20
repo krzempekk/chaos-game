@@ -1,7 +1,10 @@
+import javafx.application.Platform
 import javafx.application.Application
 import javafx.stage.Stage
 import javafx.scene.Scene
 import javafx.scene.layout._
+import javafx.event.EventHandler
+import javafx.stage.WindowEvent
 
 object Main {
   def main(args: Array[String]): Unit = {
@@ -24,10 +27,17 @@ class Main extends javafx.application.Application {
     game.addPoint(new Vector2D(100, 100))
     val root = new HBox(boardPane, sidePane)
 
+    primaryStage.setOnCloseRequest((_: WindowEvent) => {
+      Platform.exit()
+      System.exit(0)
+    })
+
     primaryStage.setTitle("Chaos Game")
     val primaryScene = new Scene(root, this.boardWidth + this.sidebarWidth, this.boardHeight)
     primaryStage.setScene(primaryScene)
     primaryStage.show()
+
+
     this.run()
   }
 
