@@ -22,6 +22,7 @@ class Main extends javafx.application.Application {
     game.addPoint(new Vector2D(100, 500))
     game.addPoint(new Vector2D(500, 100))
     game.addPoint(new Vector2D(100, 100))
+    game.addAngle(new Vector2D(100, 100), math.Pi/2)
     val root = new HBox(boardPane, sidePane)
 
     primaryStage.setTitle("Chaos Game")

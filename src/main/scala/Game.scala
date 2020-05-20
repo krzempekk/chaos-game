@@ -1,10 +1,13 @@
 import scala.collection.mutable.ListBuffer
 
 class Game {
+
   var gameVectors = new GameVectors
   var isPaused = true
 
   def addPoint(point: Vector2D): Unit = gameVectors + point
+
+  def getStartingPoint:Vector2D = this.gameVectors.currentPoint
 
   def setStartingPoint(point: Vector2D): Unit = gameVectors.currentPoint = point
 
