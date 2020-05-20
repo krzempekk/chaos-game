@@ -38,7 +38,7 @@ class Main extends javafx.application.Application {
           if(!game.isPaused){
           game.nextStep()
           boardPane.update()
-          Thread.sleep(30)}
+          Thread.sleep(1)}
         }
       }
     }

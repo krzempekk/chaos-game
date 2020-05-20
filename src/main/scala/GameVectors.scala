@@ -1,9 +1,13 @@
 import scala.collection.mutable.ListBuffer
 
 class GameVectors(var canReselectVertex: Boolean = true) {
+
   var vertices: ListBuffer[Vector2D] = ListBuffer[Vector2D]()
   private val rand = scala.util.Random
   var generatedPoints: ListBuffer[Vector2D] = ListBuffer[Vector2D]()
+
+  var multiplier = 0.5
+  var angle = 0
 
   var currentVertex = new Vector2D(0, 0)
   var currentPoint = new Vector2D(0, 0)
@@ -26,13 +30,11 @@ class GameVectors(var canReselectVertex: Boolean = true) {
     verticesToChoose(rand.nextInt(verticesToChoose.size))
   }
 
-  def nextVector(fraction: Double, angle: Double): Unit = {
+  def nextVector(): Unit = {
     val nextVertex = this.getRandomVertex
-    var nextPoint = this.currentPoint.getNextVector(nextVertex, fraction)
-    if(angle != 0 && nextVertex == this.vertices(0)) {
-      println(nextPoint - this.currentPoint)
-      println((nextPoint - this.currentPoint).rotate(angle))
-      nextPoint = (nextPoint - this.currentPoint).rotate(angle) + this.currentPoint
+    var nextPoint = this.currentPoint.getNextVector(nextVertex, multiplier)
+    if(nextVertex == this.vertices(0)) {
+      nextPoint = (nextPoint - this.vertices(0)).rotate(angle) + this.vertices(0)
     }
     this.generatedPoints.addOne(nextPoint)
     this.currentVertex = nextVertex
