@@ -1,6 +1,6 @@
 import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.geometry.{Insets, Orientation, Pos}
-import javafx.scene.control.{Button, TextField, TextFormatter}
+import javafx.scene.control.{Button, RadioButton, TextField, TextFormatter, ToggleGroup}
 import javafx.scene.layout.{FlowPane, Pane, VBox}
 import javafx.scene.paint.Color
 import javafx.scene.text.{Font, Text, TextAlignment}
@@ -35,6 +35,7 @@ class SidePane(val width:Int,val height:Int, var game: Game, var boardPane: Boar
   this.addOptionButton("Pentagon")
   this.addOwnOptions
   this.addAngleOption
+  this.addDrawRadioButtons
 
   def addAngleOption: Unit ={
     val button = new Button("Add angles")
@@ -148,5 +149,25 @@ class SidePane(val width:Int,val height:Int, var game: Game, var boardPane: Boar
     })
 
     this.buttonBar.getChildren.add(button)
+  }
+
+  def addDrawRadioButtons: Unit = {
+    val rbGroup = new ToggleGroup()
+
+    val startingPointButton = new RadioButton("Adding starting point")
+    startingPointButton.setToggleGroup(rbGroup)
+    startingPointButton.setOnMouseClicked(event =>{
+      this.game.addingStartingPoint = !this.game.addingStartingPoint
+    })
+
+    val vertexButton = new RadioButton("Adding vertex")
+    vertexButton.setToggleGroup(rbGroup)
+    vertexButton.setSelected(this.game.addingStartingPoint)
+    vertexButton.setOnMouseClicked(event =>{
+      this.game.addingStartingPoint = !this.game.addingStartingPoint
+    })
+
+    this.buttonBar.getChildren.add(startingPointButton)
+    this.buttonBar.getChildren.add(vertexButton)
   }
 }

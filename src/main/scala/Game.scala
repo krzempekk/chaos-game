@@ -4,8 +4,12 @@ class Game {
 
   var gameVectors = new GameVectors
   var isPaused = true
+  var addingStartingPoint = false
 
-  def addPoint(point: Vector2D): Unit = gameVectors + point
+  def addPoint(point: Vector2D): Unit ={
+    if(addingStartingPoint) gameVectors.currentPoint = point
+    else gameVectors + point
+  }
 
   def getStartingPoint:Vector2D = this.gameVectors.currentPoint
 
