@@ -21,4 +21,7 @@ class GameVectors() {
     this.currentVector = nextVector
     nextVector
   }
+
+  def clear(): Unit = this.vectors.clear()
+
 }

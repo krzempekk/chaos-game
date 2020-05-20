@@ -11,4 +11,8 @@ class Game {
 
   def nextStep(): Unit = gameVectors.nextVector(multiplier)
 
+  def cleanGame(): Unit = gameVectors.clear()
+
+
+
 }
