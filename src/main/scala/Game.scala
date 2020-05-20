@@ -3,7 +3,7 @@ import scala.collection.mutable.ListBuffer
 class Game {
   var gameVectors = new GameVectors
   var multiplier = 0.5
-  var angle = math.Pi / 2
+  var angle = 0
   var isPaused = false
 
   def addPoint(point: Vector2D): Unit = gameVectors + point

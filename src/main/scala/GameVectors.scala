@@ -21,14 +21,14 @@ class GameVectors(var canReselectVertex: Boolean = true) {
   def getAll: List[Vector2D] = this.vertices.appendAll(this.generatedPoints).toList
 
   def getRandomVertex: Vector2D = {
-    val vectorsToChoose: ListBuffer[Vector2D] = this.vertices.clone()
-    if(!this.canReselectVertex) vectorsToChoose -= this.currentVertex
-    vectorsToChoose(rand.nextInt(vectorsToChoose.size))
+    val verticesToChoose: ListBuffer[Vector2D] = this.vertices.clone()
+    if(!this.canReselectVertex) verticesToChoose -= this.currentVertex
+    verticesToChoose(rand.nextInt(verticesToChoose.size))
   }
 
   def nextVector(fraction: Double, angle: Double): Unit = {
     val nextVertex = this.getRandomVertex
-    var nextPoint = this.currentVertex.getNextVector(nextVertex, fraction)
+    var nextPoint = this.currentPoint.getNextVector(nextVertex, fraction)
     if(angle != 0 && nextVertex == this.vertices(0)) {
       println(nextPoint - this.currentPoint)
       println((nextPoint - this.currentPoint).rotate(angle))
