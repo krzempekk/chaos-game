@@ -19,6 +19,11 @@ class Presets(var name: String, var width: Int, var height: Int) {
                 vectors.addInitialVectors(ListBuffer(new Vector2D(width-10,height-10),new Vector2D(10,height-10),
                     new Vector2D(10,10), new Vector2D(width-10,10), new Vector2D((width-20)/2,(height-20)/2)))
                 (0.66,vectors,true)
+            case "Carpet"=>
+                vectors.addInitialVectors(ListBuffer(new Vector2D(width-10,height-10),new Vector2D(10,height-10),
+                    new Vector2D(10,10), new Vector2D(width-10,10),new Vector2D(10,(height-20)/2),
+                    new Vector2D((width-20)/2,height-20),new Vector2D(width-10,(height-20)/2),new Vector2D((width-20)/2,10)))
+                (0.66,vectors,true)
         }
     }
 }

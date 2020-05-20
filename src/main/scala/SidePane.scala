@@ -41,6 +41,7 @@ class SidePane(val width:Int,val height:Int, var game: Game, var boardPane: Boar
   this.addOptionButton("Rectangular")
   this.addOptionButton("Pentagon")
   this.addOptionButton("Vicsek")
+  this.addOptionButton("Carpet")
   this.addOwnOptions
   this.addAngleOption
 
