@@ -1,15 +1,27 @@
-import scalafx.application.JFXApp
-import scalafx.application.JFXApp.PrimaryStage
 import javafx.application.Application
-import scalafx.scene.Scene
+import javafx.stage.Stage
+import javafx.scene.Scene
+import javafx.scene.layout._
 
-object Main extends JFXApp {
-  stage = new PrimaryStage {
-    title.value = "Chaos Game"
-    width = 800
-    height = 600
-    scene = new Scene {
-      
-    }
+object Main {
+  def main(args: Array[String]): Unit = {
+    Application.launch(classOf[Main], args: _*)
+  }
+}
+
+class Main extends javafx.application.Application {
+  val boardWidth = 1000
+  val sidebarWidth = 300
+  val boardHeight = 1000
+
+  override def start(primaryStage: Stage): Unit = {
+    val boardPane = new BoardPane
+    val sidePane = new SidePane
+    val root = new HBox(boardPane, sidePane)
+
+    primaryStage.setTitle("Chaos Game")
+    val primaryScene = new Scene(root, this.boardWidth + this.sidebarWidth, this.boardHeight)
+    primaryStage.setScene(primaryScene)
+    primaryStage.show()
   }
 }
