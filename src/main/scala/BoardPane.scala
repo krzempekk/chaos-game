@@ -16,6 +16,7 @@ class BoardPane(val width: Int, val height: Int, val game: Game) extends Pane {
   val canvas = new Canvas(width, height)
   val pointRadius = 3
   var canWrite = true
+  private val rand = scala.util.Random
 
   canvas.setOnMouseClicked(event => {
     if(canWrite){
@@ -48,7 +49,7 @@ class BoardPane(val width: Int, val height: Int, val game: Game) extends Pane {
 
       gc.setFill(Color.RED)
       for (point <- game.getInitialPoints) gc.fillOval(point.x, point.y, this.pointRadius, this.pointRadius)
-      gc.setFill(Color.WHITE)
+      gc.setFill(Color.rgb(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255)))
       for (point <- game.getGeneratedPoints) gc.fillOval(point.x, point.y, this.pointRadius, this.pointRadius)
       gc.setFill(Color.BLUE)
       gc.fillOval(this.game.getStartingPoint.x, this.game.getStartingPoint.y, this.pointRadius, this.pointRadius)
