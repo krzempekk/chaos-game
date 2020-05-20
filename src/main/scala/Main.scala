@@ -13,15 +13,15 @@ class Main extends javafx.application.Application {
   val boardWidth = 800
   val sidebarWidth = 300
   val boardHeight = 800
+  val game = new Game
+  val boardPane = new BoardPane(boardWidth, boardHeight, game)
+  val sidePane = new SidePane(sidebarWidth, boardHeight, game)
 
   override def start(primaryStage: Stage): Unit = {
-    val game = new Game
-    game.setStartingPoint(new Vector2D(100, 100))
-    game.addPoint(new Vector2D(10, 10))
-    game.addPoint(new Vector2D(300, 10))
-    game.addPoint(new Vector2D(10, 300))
-    val boardPane = new BoardPane(boardWidth, boardHeight, game)
-    val sidePane = new SidePane(sidebarWidth, boardHeight, game)
+    game.setStartingPoint(new Vector2D(300, 300))
+    game.addPoint(new Vector2D(500, 100))
+    game.addPoint(new Vector2D(100, 500))
+    game.addPoint(new Vector2D(700, 500))
     val root = new HBox(boardPane, sidePane)
 
     primaryStage.setTitle("Chaos Game")
@@ -29,13 +29,21 @@ class Main extends javafx.application.Application {
     primaryStage.setScene(primaryScene)
     primaryStage.show()
 
+    this.run()
+  }
 
-    for (i <- Range(1, 10)){
-      game.nextStep()
-      println(i)
-      for(vector <- game.gameVectors.getList) println(vector)
-      boardPane.update()
+  def run(): Unit = {
+    val thread = new Thread {
+      override def run(): Unit = {
+        for(_ <- Range(1, 1000)) {
+          game.nextStep()
+          boardPane.update()
+          Thread.sleep(100)
+        }
+      }
     }
+
+    thread.start()
   }
 
 
