@@ -5,7 +5,7 @@ class Game {
   var generatedPoints: ListBuffer[Vector2D] = ListBuffer[Vector2D]()
   //  var gameVectors = new GameVectors
   var multiplier = 0.5
-  var isPaused = false
+  var isPaused = true
 
   def addPoint(point: Vector2D): Unit = initialPoints + point
 
