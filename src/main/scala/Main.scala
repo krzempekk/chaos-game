@@ -18,10 +18,12 @@ class Main extends javafx.application.Application {
   val sidePane = new SidePane(sidebarWidth, boardHeight,game)
 
   override def start(primaryStage: Stage): Unit = {
-    game.setStartingPoint(new Vector2D(300, 300))
-    game.addPoint(new Vector2D(500, 100))
+    game.setStartingPoint(new Vector2D(150, 150))
+    game.addPoint(new Vector2D(100, 100))
     game.addPoint(new Vector2D(100, 500))
-    game.addPoint(new Vector2D(700, 500))
+    game.addPoint(new Vector2D(500, 500))
+    game.addPoint(new Vector2D(500, 100))
+    game.addPoint(new Vector2D(300, 300))
     val root = new HBox(boardPane, sidePane)
 
     primaryStage.setTitle("Chaos Game")
@@ -39,7 +41,7 @@ class Main extends javafx.application.Application {
           if(!game.isPaused){
           game.nextStep()
           boardPane.update()
-          Thread.sleep(30)}
+          Thread.sleep(10)}
         }
       }
     }
