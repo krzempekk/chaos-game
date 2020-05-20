@@ -1,5 +1,5 @@
 class Game {
-  val gameVectors = new GameVectors
+  var gameVectors = new GameVectors
 
   def addPoint(point: Vector2D): Unit = gameVectors + point
 }
