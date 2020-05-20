@@ -1,6 +1,7 @@
 class Game {
   var gameVectors = new GameVectors
   var multiplier = 0.5
+  var isPaused = false
 
   def addPoint(point: Vector2D): Unit = gameVectors + point
 
@@ -11,7 +12,16 @@ class Game {
 
   def nextStep(): Unit = gameVectors.nextVector(multiplier)
 
-  def cleanGame(): Unit = gameVectors.clear()
+  def cleanGame(): Unit = {
+    gameVectors.clear()
+    this.isPaused = true
+  }
+
+  def startWithNew(newVectors: GameVectors, newMultiplier: Double) = {
+    this.gameVectors = newVectors
+    this.multiplier = newMultiplier
+  }
+
 
 
 

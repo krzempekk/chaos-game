@@ -32,4 +32,6 @@ class BoardPane(val width: Int, val height: Int, val game: Game) extends Pane {
   }
 
   def update(): Unit = this.layoutChildren()
+
+  def run():
 }
