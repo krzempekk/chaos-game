@@ -5,10 +5,12 @@ class Game {
   var gameVectors = new GameVectors
   var isPaused = true
   var addingStartingPoint = false
+  var sidePane: SidePane = _
 
-  def addPoint(point: Vector2D): Unit ={
+  def addPoint(point: Vector2D): Unit = {
     if(addingStartingPoint) gameVectors.currentPoint = point
     else gameVectors + point
+    sidePane.updateVertexChoiceBox()
   }
 
   def getStartingPoint:Vector2D = this.gameVectors.currentPoint

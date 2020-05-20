@@ -1,16 +1,20 @@
 import javafx.beans.value.{ChangeListener, ObservableValue}
+import javafx.event.{Event, EventHandler}
 import javafx.geometry.{Insets, Orientation, Pos}
-import javafx.scene.control.{Button, RadioButton, TextField, TextFormatter, ToggleGroup}
+import javafx.scene.control.{Button, ChoiceBox, RadioButton, TextField, TextFormatter, ToggleGroup}
 import javafx.scene.layout.{FlowPane, Pane, VBox}
 import javafx.scene.paint.Color
 import javafx.scene.text.{Font, Text, TextAlignment}
 import scalafx.util.converter.{DoubleStringConverter, IntStringConverter}
 
-class SidePane(val width:Int,val height:Int, var game: Game, var boardPane: BoardPane) extends Pane {
+class SidePane(val width: Int, val height: Int, var game: Game, var boardPane: BoardPane) extends Pane {
   var buttonBar = new VBox()
   var optionsBar = new VBox()
+  var vertexInfo = new VBox()
   var wrapper = new VBox()
+  val vertexChoiceBox = new ChoiceBox[Vector2D]()
   var numOfPoints = 0
+  var editedVertex: Option[Vector2D] = None
 
   buttonBar.prefWidthProperty().bind(this.prefWidthProperty())
   buttonBar.setAlignment(Pos.CENTER)
@@ -20,10 +24,13 @@ class SidePane(val width:Int,val height:Int, var game: Game, var boardPane: Boar
   optionsBar.setAlignment(Pos.CENTER)
   optionsBar.setSpacing(5)
 
+  vertexInfo.prefWidthProperty().bind(this.prefWidthProperty())
+  vertexInfo.setAlignment(Pos.CENTER)
+
   wrapper.setSpacing(10)
 
   buttonBar.setPadding(new Insets(0, 0, 0, 30))
-  wrapper.getChildren.addAll(buttonBar,optionsBar)
+  wrapper.getChildren.addAll(buttonBar, optionsBar, vertexInfo)
   this.getChildren.add(this.wrapper)
 
   this.addTextLabel("Choose one of prepared options", 15)
@@ -35,6 +42,7 @@ class SidePane(val width:Int,val height:Int, var game: Game, var boardPane: Boar
   this.addOptionButton("Pentagon")
   this.addOwnOptions
   this.addAngleOption
+  this.addVertexInfo
   this.addDrawRadioButtons
 
   def addAngleOption: Unit ={
@@ -140,16 +148,32 @@ class SidePane(val width:Int,val height:Int, var game: Game, var boardPane: Boar
     val button = new Button(text)
     button.getStyleClass.add("button-raised")
 
-    button.setOnMouseClicked(event=>{
-      val preset = new Presets(text,this.boardPane.width,this.boardPane.height)
+    button.setOnMouseClicked(event => {
+      val preset = new Presets(text, this.boardPane.width, this.boardPane.height)
       this.game.startWithNew(preset.initialParameters._2, preset.initialParameters._1, preset.initialParameters._3)
       this.game.setStartingPoint(new Vector2D(this.boardPane.width/2,this.boardPane.height/2))
-      this.game.isPaused=false
+      this.game.isPaused = false
       this.boardPane.canWrite = false
     })
 
     this.buttonBar.getChildren.add(button)
   }
+
+  def updateVertexChoiceBox(): Unit = {
+    vertexChoiceBox.getItems.clear()
+    for(vertex <- this.game.getInitialPoints) {
+      vertexChoiceBox.getItems.add(vertex)
+    }
+  }
+
+  def addVertexInfo: Unit = {
+    vertexChoiceBox.onActionProperty().setValue((t: Event) => {
+      editedVertex = Some(t.getTarget.asInstanceOf[ChoiceBox[Vector2D]].getValue)
+    })
+
+    this.vertexInfo.getChildren.add(vertexChoiceBox)
+  }
+
 
   def addDrawRadioButtons: Unit = {
     val rbGroup = new ToggleGroup()
