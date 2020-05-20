@@ -18,6 +18,7 @@ class GameVectors() {
   def nextVector(fraction: Double): Vector2D = {
     var nextVector = this.getRandomVector
     nextVector = this.currentVector.getNextVector(nextVector, fraction)
+    this.vectors.addOne(nextVector)
     this.currentVector = nextVector
     nextVector
   }
