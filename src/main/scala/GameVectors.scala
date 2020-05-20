@@ -20,16 +20,20 @@ class GameVectors(var canReselectVertex: Boolean = true) {
 
   def getAll: List[Vector2D] = this.vectors.appendAll(this.generatedPoints).toList
 
-  def getRandomVector: Vector2D = {
+  def getRandomVertex: Vector2D = {
     val vectorsToChoose: ListBuffer[Vector2D] = this.vectors.clone()
     if(!this.canReselectVertex) vectorsToChoose -= previousVector
     vectorsToChoose(rand.nextInt(vectorsToChoose.size))
   }
 
-  def nextVector(fraction: Double): Unit = {
-    val nextVector = this.getRandomVector
-    val nextPoint = this.previousPoint.getNextVector(nextVector, fraction)
-
+  def nextVector(fraction: Double, angle: Double): Unit = {
+    val nextVertex = this.getRandomVertex
+    var nextPoint = this.previousVertex.getNextVector(nextVertex, fraction)
+    if(angle != 0 && nextVertex == vectors(0)) {
+      println(nextPoint - previousPoint)
+      println((nextPoint - previousPoint).rotate(angle))
+      nextPoint = (nextPoint - previousPoint).rotate(angle) + previousPoint
+    }
     this.generatedPoints.addOne(nextPoint)
     this.previousVector = nextVector
     this.previousPoint = nextPoint
@@ -39,5 +43,7 @@ class GameVectors(var canReselectVertex: Boolean = true) {
     this.vectors.clear()
     this.generatedPoints.clear()
   }
+
+
 
 }

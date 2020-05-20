@@ -1,16 +1,10 @@
-//object NeighbourRule extends Enumeration {
-//  type NeighbourRule = Value
-//  val Any, NotPrevious, NotPreviousNeighbour = Value
-//}
-//
-//sealed trait NextNeighbour
-//case object AnyNeighbour extends NextNeighbour
-//case class NotInDistance(distance: Int) extends NextNeighbour
+import scala.collection.mutable.ListBuffer
 
 class Game {
-  var multiplier = 0.66
+  var gameVectors = new GameVectors
+  var multiplier = 0.5
+  var angle = math.Pi / 2
   var isPaused = false
-  var gameVectors = new GameVectors(false)
 
   def addPoint(point: Vector2D): Unit = gameVectors + point
 
@@ -18,7 +12,7 @@ class Game {
 
   def removePoint(point: Vector2D): Unit = gameVectors - point
 
-  def nextStep(): Unit = gameVectors.nextVector(multiplier)
+  def nextStep(): Unit = gameVectors.nextVector(multiplier, angle)
 
   def setCanReselectVertex(canReselectVertex: Boolean): Unit = gameVectors.canReselectVertex = canReselectVertex
 

@@ -6,10 +6,13 @@ import javafx.scene.paint.Color
 class BoardPane(val width: Int, val height: Int, val game: Game) extends Pane {
   val canvas = new Canvas(width, height)
   val pointRadius = 3
+  var canWrite = true
 
   canvas.setOnMouseClicked(event => {
+    if(canWrite){
     this.game.addPoint(new Vector2D(event.getX.toInt, event.getY.toInt))
     this.update()
+    }
   })
 
   this.setMinWidth(width)
