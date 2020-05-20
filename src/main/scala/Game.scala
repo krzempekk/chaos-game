@@ -8,7 +8,7 @@ class Game {
 
   def addPoint(point: Vector2D): Unit = gameVectors + point
 
-  def setStartingPoint(point: Vector2D): Unit = gameVectors.previousPoint = point
+  def setStartingPoint(point: Vector2D): Unit = gameVectors.currentPoint = point
 
   def removePoint(point: Vector2D): Unit = gameVectors - point
 

@@ -18,6 +18,10 @@ class Main extends javafx.application.Application {
   val sidePane = new SidePane(sidebarWidth, boardHeight,game, boardPane)
 
   override def start(primaryStage: Stage): Unit = {
+    game.setStartingPoint(new Vector2D(200, 200))
+    game.addPoint(new Vector2D(100, 500))
+    game.addPoint(new Vector2D(500, 100))
+    game.addPoint(new Vector2D(300, 300))
     val root = new HBox(boardPane, sidePane)
 
     primaryStage.setTitle("Chaos Game")

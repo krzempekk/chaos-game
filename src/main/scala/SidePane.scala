@@ -44,7 +44,7 @@ class SidePane(val width:Int,val height:Int, var game: Game, var boardPane: Boar
 
       textFormatter.valueProperty().addListener(new ChangeListener[Double] {
         override def changed(observableValue: ObservableValue[_ <: Double], t: Double, t1: Double): Unit = {
-          if(!t1.equals(0.0) && game.gameVectors.vectors.nonEmpty){
+          if(!t1.equals(0.0) && game.gameVectors.vertices.nonEmpty){
             game.multiplier = t1
             game.isPaused = false
             boardPane.canWrite = false
