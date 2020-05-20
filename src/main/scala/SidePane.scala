@@ -1,24 +1,33 @@
 import javafx.beans.value.{ChangeListener, ObservableValue}
-import javafx.geometry.{Insets, Orientation, Pos}
-import javafx.scene.control.{Button, RadioButton, TextField, TextFormatter, ToggleGroup}
+import javafx.geometry.{Insets, Pos}
+import javafx.scene.control.{Button, TextField, TextFormatter}
 import javafx.scene.layout.{FlowPane, Pane, VBox}
 import javafx.scene.paint.Color
 import javafx.scene.text.{Font, Text, TextAlignment}
-import scalafx.util.converter.{DoubleStringConverter, IntStringConverter}
+import scalafx.util.converter.DoubleStringConverter
 
-class SidePane(val width:Int,val height:Int, var game: Game, var boardPane: BoardPane) extends Pane {
+class SidePane(val width:Int,val height:Int, var game: Game, var boardPane: BoardPane) extends FlowPane {
   var buttonBar = new VBox()
   var optionsBar = new VBox()
   var wrapper = new VBox()
   var numOfPoints = 0
 
+  this.setPadding(new Insets(20,0,0,30))
+
+  this.addTextLabel("Choose one of prepared options", 15)
+  this.addTextLabel("or pick few points by your own",15)
+
   buttonBar.prefWidthProperty().bind(this.prefWidthProperty())
   buttonBar.setAlignment(Pos.CENTER)
   buttonBar.setSpacing(10)
 
+  VBox.setMargin(buttonBar, new Insets(40))
+
   optionsBar.prefWidthProperty().bind(this.prefWidthProperty())
   optionsBar.setAlignment(Pos.CENTER)
   optionsBar.setSpacing(5)
+
+  VBox.setMargin(optionsBar, new Insets(0,0,0,40))
 
   wrapper.setSpacing(10)
 
@@ -26,8 +35,6 @@ class SidePane(val width:Int,val height:Int, var game: Game, var boardPane: Boar
   wrapper.getChildren.addAll(buttonBar,optionsBar)
   this.getChildren.add(this.wrapper)
 
-  this.addTextLabel("Choose one of prepared options", 15)
-  this.addTextLabel("or pick few points by your own",15)
   this.addPauseButton(game.isPaused)
   this.addResetButton
   this.addOptionButton("Sierpinsky")
@@ -35,7 +42,6 @@ class SidePane(val width:Int,val height:Int, var game: Game, var boardPane: Boar
   this.addOptionButton("Pentagon")
   this.addOwnOptions
   this.addAngleOption
-  this.addDrawRadioButtons
 
   def addAngleOption: Unit ={
     val button = new Button("Add angles")
@@ -73,7 +79,7 @@ class SidePane(val width:Int,val height:Int, var game: Game, var boardPane: Boar
     textLabel.setTextAlignment(TextAlignment.CENTER)
     textLabel.setFill(Color.CORNFLOWERBLUE)
     textLabel.wrappingWidthProperty.bind(this.prefWidthProperty)
-    this.buttonBar.getChildren.add(textLabel)
+    this.wrapper.getChildren.add(textLabel)
   }
 
   def addOwnOptions: Unit ={
@@ -149,25 +155,5 @@ class SidePane(val width:Int,val height:Int, var game: Game, var boardPane: Boar
     })
 
     this.buttonBar.getChildren.add(button)
-  }
-
-  def addDrawRadioButtons: Unit = {
-    val rbGroup = new ToggleGroup()
-
-    val startingPointButton = new RadioButton("Adding starting point")
-    startingPointButton.setToggleGroup(rbGroup)
-    startingPointButton.setOnMouseClicked(event =>{
-      this.game.addingStartingPoint = !this.game.addingStartingPoint
-    })
-
-    val vertexButton = new RadioButton("Adding vertex")
-    vertexButton.setToggleGroup(rbGroup)
-    vertexButton.setSelected(this.game.addingStartingPoint)
-    vertexButton.setOnMouseClicked(event =>{
-      this.game.addingStartingPoint = !this.game.addingStartingPoint
-    })
-
-    this.buttonBar.getChildren.add(startingPointButton)
-    this.buttonBar.getChildren.add(vertexButton)
   }
 }
