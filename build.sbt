@@ -6,6 +6,8 @@ scalaVersion := "2.13.2"
 
 libraryDependencies += "org.scalafx" %% "scalafx" % "14-R19"
 
+libraryDependencies += "com.jfoenix" % "jfoenix" % "9.0.1"
+
 scalacOptions ++= Seq("-unchecked", "-deprecation", "-Xcheckinit", "-encoding", "utf8", "-feature")
 
 fork := true

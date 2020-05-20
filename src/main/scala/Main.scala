@@ -18,7 +18,7 @@ class Main extends javafx.application.Application {
     val game = new Game
 
     val boardPane = new BoardPane(boardWidth, boardHeight, game)
-    val sidePane = new SidePane
+    val sidePane = new SidePane(sidebarWidth, boardHeight, game)
     val root = new HBox(boardPane, sidePane)
 
     primaryStage.setTitle("Chaos Game")

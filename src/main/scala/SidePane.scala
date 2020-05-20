@@ -24,8 +24,8 @@ class SidePane(val width:Int,val height:Int, var game: Game) extends Pane {
   this.addOptionButton("Sierpinsky")
   this.addOptionButton("Rectangular")
   this.addOptionButton("Pentagon")
-  this.addPauseButton()
-  this.addResetButton()
+//  this.addPauseButton()
+//  this.addResetButton()
   this.getChildren.add(new Label(""))
 
   def addTextLabel(text: String, fontSize: Int): Unit = {
@@ -36,13 +36,13 @@ class SidePane(val width:Int,val height:Int, var game: Game) extends Pane {
     this.getChildren.add(textLabel)
   }
 
-  def addOptionButton(text: String): Unit ={
+  def addOptionButton(text: String): Unit = {
     var button = new JFXButton(text)
     button.getStyleClass.add("button-rised")
 
-    button.addEventHandler(MouseEvent.MOUSE_CLICKED)={
-
-    }
-    );
+//    button.addEventHandler(MouseEvent.MOUSE_CLICKED)={
+//
+//    }
+//    );
   }
 }
