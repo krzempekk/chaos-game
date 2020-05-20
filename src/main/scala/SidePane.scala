@@ -16,21 +16,22 @@ class SidePane(val width:Int,val height:Int, var game: Game, var boardPane: Boar
   this.setPadding(new Insets(10, 10, 100, 10))
   this.getChildren.add(this.buttonBar)
 
-  this.addPauseButton
+  this.addTextLabel("Choose one of prepared options", 15)
+  this.addTextLabel("or pick few points by your own",15)
+  this.addPauseButton(game.isPaused)
   this.addResetButton
   this.addOptionButton("Sierpinsky")
   this.addOptionButton("Rectangular")
   this.addOptionButton("Pentagon")
   this.addOwnOptions
-  this.addTextLabel("Choose one of prepared options or pick your own points to start", 15)
 
-
+  
   def addTextLabel(text: String, fontSize: Int): Unit = {
     val textLabel = new Text(text)
     textLabel.setFont(Font.font("Verdana", fontSize))
     textLabel.setTextAlignment(TextAlignment.CENTER)
     textLabel.wrappingWidthProperty.bind(this.prefWidthProperty)
-    this.getChildren.add(textLabel)
+    this.buttonBar.getChildren.add(textLabel)
   }
 
   def addOwnOptions: Unit ={
@@ -59,8 +60,9 @@ class SidePane(val width:Int,val height:Int, var game: Game, var boardPane: Boar
     this.buttonBar.getChildren.add(button)
   }
 
-  def addPauseButton: Unit = {
-    val button = new Button("Pause")
+  def addPauseButton(isPaused: Boolean): Unit = {
+    var button = new Button("Pause")
+    if(isPaused){ button = new Button("Resume")}
     button.getStyleClass.add("button-raised")
 
     button.setOnMouseClicked(event=>{
