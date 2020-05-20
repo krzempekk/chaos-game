@@ -1,18 +1,19 @@
 import scala.collection.mutable.ListBuffer
 
 class Game {
+
   var gameVectors = new GameVectors
-  var multiplier = 0.5
-  var angle = math.Pi / 2
   var isPaused = true
 
   def addPoint(point: Vector2D): Unit = gameVectors + point
+
+  def getStartingPoint:Vector2D = this.gameVectors.currentPoint
 
   def setStartingPoint(point: Vector2D): Unit = gameVectors.currentPoint = point
 
   def removePoint(point: Vector2D): Unit = gameVectors - point
 
-  def nextStep(): Unit = gameVectors.nextVector(multiplier, angle)
+  def nextStep(): Unit = gameVectors.nextVector()
 
   def setCanReselectVertex(canReselectVertex: Boolean): Unit = gameVectors.canReselectVertex = canReselectVertex
 
@@ -28,7 +29,11 @@ class Game {
   def startWithNew(newVectors: GameVectors, newMultiplier: Double, canReselectVertex: Boolean): Unit = {
     this.gameVectors.clear()
     this.gameVectors = newVectors
-    this.multiplier = newMultiplier
+    this.setMultiplier(newMultiplier)
     this.setCanReselectVertex(canReselectVertex)
   }
+
+  def setMultiplier(newMultiplier: Double):Unit = this.gameVectors.multiplier = newMultiplier
+
+  def addAngle(point: Vector2D, angle: Double): Unit = this.gameVectors.addAngle(point, angle)
 }

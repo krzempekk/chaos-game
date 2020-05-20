@@ -25,6 +25,7 @@ class Main extends javafx.application.Application {
     game.addPoint(new Vector2D(100, 500))
     game.addPoint(new Vector2D(500, 100))
     game.addPoint(new Vector2D(100, 100))
+    game.addAngle(new Vector2D(100, 100), math.Pi/2)
     val root = new HBox(boardPane, sidePane)
 
     primaryStage.setOnCloseRequest((_: WindowEvent) => {
@@ -48,7 +49,7 @@ class Main extends javafx.application.Application {
           if(!game.isPaused){
           game.nextStep()
           boardPane.update()
-          Thread.sleep(30)}
+          Thread.sleep(1)}
         }
       }
     }
