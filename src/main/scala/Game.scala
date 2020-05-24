@@ -21,6 +21,8 @@ class Game {
 
   def nextStep(): Unit = gameVectors.nextVector()
 
+  def canReselectVertex: Boolean = gameVectors.canReselectVertex
+
   def setCanReselectVertex(canReselectVertex: Boolean): Unit = gameVectors.canReselectVertex = canReselectVertex
 
   def cleanGame(): Unit = {
