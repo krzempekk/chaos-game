@@ -20,7 +20,7 @@ class BoardPane(val width: Int, val height: Int, val game: Game) extends Pane {
 
   canvas.setOnMouseClicked(event => {
     if(canWrite) {
-      this.game.addPoint(new Vector2D(event.getX.toInt, event.getY.toInt))
+      this.game.addPoint(Vector2D(event.getX.toInt, event.getY.toInt))
       this.update()
     }
   })
@@ -49,7 +49,7 @@ class BoardPane(val width: Int, val height: Int, val game: Game) extends Pane {
 
       gc.setFill(Color.RED)
       for (point <- game.getInitialPoints) gc.fillOval(point.x, point.y, this.pointRadius, this.pointRadius)
-      gc.setFill(Color.rgb(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255)))
+      gc.setFill(Color.rgb(50, 50 + rand.nextInt(30), 150))
       for (point <- game.getGeneratedPoints) gc.fillOval(point.x, point.y, this.pointRadius, this.pointRadius)
       gc.setFill(Color.BLUE)
       gc.fillOval(this.game.getStartingPoint.x, this.game.getStartingPoint.y, this.pointRadius, this.pointRadius)

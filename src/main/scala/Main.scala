@@ -19,10 +19,10 @@ class Main extends javafx.application.Application {
   game.sidePane = sidePane
 
   override def start(primaryStage: Stage): Unit = {
-    game.setStartingPoint(new Vector2D(200, 200))
-    game.addPoint(new Vector2D(100, 500))
-    game.addPoint(new Vector2D(500, 100))
-    game.addPoint(new Vector2D(100, 100))
+    game.setStartingPoint(Vector2D(200, 200))
+    game.addPoint(Vector2D(100, 500))
+    game.addPoint(Vector2D(500, 100))
+    game.addPoint(Vector2D(100, 100))
     val root = new HBox(boardPane, sidePane)
 
     primaryStage.setOnCloseRequest((_: WindowEvent) => {

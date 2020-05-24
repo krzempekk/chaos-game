@@ -1,7 +1,8 @@
 import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.event.{Event, EventHandler}
 import javafx.geometry.{Insets, Orientation, Pos}
-import javafx.scene.control.{Button, RadioButton, ChoiceBox, TextField, TextFormatter, ToggleGroup}
+import javafx.scene.control.{Button, ChoiceBox, RadioButton, TextField, TextFormatter, ToggleGroup}
+import javafx.scene.input.MouseEvent
 import javafx.scene.layout.{FlowPane, Pane, VBox}
 import javafx.scene.paint.Color
 import javafx.scene.text.{Font, Text, TextAlignment}
@@ -14,8 +15,10 @@ class SidePane(val width:Int,val height:Int, var game: Game, var boardPane: Boar
   var wrapper = new VBox()
   val vertexChoiceBox = new ChoiceBox[Vector2D]()
   var numOfPoints = 0
-  var editedVertex: Option[Vector2D] = None
 
+  var pauseButton = new Button()
+
+  var editedVertex: Option[Vector2D] = None
   this.setPadding(new Insets(20,0,0,30))
 
   this.addTextLabel("Choose one of prepared options", 15)
@@ -119,31 +122,38 @@ class SidePane(val width:Int,val height:Int, var game: Game, var boardPane: Boar
     this.buttonBar.getChildren.add(button)
   }
 
-  def addPauseButton(isPaused: Boolean): Unit = {
-    var button = new Button("Pause")
-    if(isPaused){ button = new Button("Resume")}
-    button.getStyleClass.add("button-raised")
-
-    button.setOnMouseClicked(event=>{
-      if(button.getText.equals("Pause")){
-        button.setText("Resume")
-        game.isPaused=true
-      }
-      else{
-        if(game.gameVectors.vertices.nonEmpty){
-        button.setText("Pause")
-        game.isPaused=false}
+  def pauseButtonAction(): Unit = {
+    if(this.pauseButton.getText.equals("Pause")){
+      this.pauseButton.setText("Resume")
+      game.isPaused=true
+    }
+    else{
+      if(game.gameVectors.vertices.nonEmpty){
+        this.pauseButton.setText("Pause")
+        game.isPaused=false
       }
     }
+  }
+
+  def addPauseButton(isPaused: Boolean): Unit = {
+    this.pauseButton.setText("Pause")
+    if(isPaused){
+      this.pauseButton.setText("Resume")
+    }
+    this.pauseButton.getStyleClass.add("button-raised")
+
+    this.pauseButton.setOnMouseClicked(_=>{
+      this.pauseButtonAction()
+    }
     )
-    this.buttonBar.getChildren.add(button)
+    this.buttonBar.getChildren.add(this.pauseButton)
   }
 
   def addResetButton: Unit ={
     val button = new Button("Reset")
     button.getStyleClass.add("button-raised")
 
-    button.setOnMouseClicked(event=>{
+    button.setOnMouseClicked(_=>{
       this.game.cleanGame()
       this.boardPane.canvas.getGraphicsContext2D.clearRect(0,0,this.boardPane.canvas.getWidth,this.boardPane.canvas.getHeight)
       this.optionsBar.getChildren.clear()
@@ -160,8 +170,8 @@ class SidePane(val width:Int,val height:Int, var game: Game, var boardPane: Boar
     button.setOnMouseClicked(event => {
       val preset = new Presets(text, this.boardPane.width, this.boardPane.height)
       this.game.startWithNew(preset.initialParameters._2, preset.initialParameters._1, preset.initialParameters._3)
-      this.game.setStartingPoint(new Vector2D(this.boardPane.width/2,this.boardPane.height/2))
-      this.game.isPaused = false
+      this.game.setStartingPoint(Vector2D(this.boardPane.width/2,this.boardPane.height/2))
+      if(this.game.isPaused) this.pauseButtonAction()
       this.boardPane.canWrite = false
     })
 

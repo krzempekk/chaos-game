@@ -9,8 +9,8 @@ class GameVectors(var canReselectVertex: Boolean = true) {
 
   var multiplier = 0.5
 
-  var currentVertex = new Vector2D(0, 0)
-  var currentPoint = new Vector2D(0, 0)
+  var currentVertex = Vector2D(0, 0)
+  var currentPoint = Vector2D(0, 0)
 
   var anglesByVertices: HashMap[Vector2D, Double] = HashMap[Vector2D, Double]()
 
@@ -56,3 +56,4 @@ class GameVectors(var canReselectVertex: Boolean = true) {
   }
 
 }
+
