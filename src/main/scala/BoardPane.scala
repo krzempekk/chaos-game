@@ -1,16 +1,16 @@
 import java.io.IOException
 
+import GameActionType.GameActionType
+import UIActionType.UIActionType
 import javafx.application.Platform
 import javafx.scene.canvas.Canvas
-import javafx.scene.input.{KeyCode, MouseEvent}
+import javafx.scene.input.KeyCode
 import javafx.scene.layout.Pane
 import javafx.scene.paint.Color
 import javafx.stage.FileChooser
 import javax.imageio.ImageIO
 import scalafx.embed.swing.SwingFXUtils
 import scalafx.scene.image.WritableImage
-
-
 
 class BoardPane(val width: Int, val height: Int, val game: Game) extends Pane {
   val canvas = new Canvas(width, height)
@@ -19,10 +19,7 @@ class BoardPane(val width: Int, val height: Int, val game: Game) extends Pane {
   private val rand = scala.util.Random
 
   canvas.setOnMouseClicked(event => {
-    if(canWrite) {
-      this.game.addPoint(Vector2D(event.getX.toInt, event.getY.toInt))
-      this.update()
-    }
+    if(canWrite) this.game.addPoint(Vector2D(event.getX.toInt, event.getY.toInt))
   })
 
   canvas.setFocusTraversable(true)
@@ -56,7 +53,22 @@ class BoardPane(val width: Int, val height: Int, val game: Game) extends Pane {
     })
   }
 
-  def update(): Unit = this.layoutChildren()
+  def reset(): Unit = {
+    this.canvas.getGraphicsContext2D.clearRect(0,0, this.canvas.getWidth, this.canvas.getHeight)
+    this.canWrite = true
+  }
+
+  def receiveUpdate(game: Game, actionType: GameActionType): Unit = actionType match {
+    case _ => this.layoutChildren()
+  }
+
+  import UIActionType._
+
+  def receiveUpdate(sidePane: SidePane, actionType: UIActionType): Unit = actionType match {
+    case Reset => this.reset()
+    case PresetLoaded => this.canWrite = false
+    case _ =>
+  }
 
   def saveImage(): Unit = {
     val fileChooser = new FileChooser()

@@ -14,6 +14,10 @@ class GameVectors(var canReselectVertex: Boolean = true) {
 
   var anglesByVertices: HashMap[Vector2D, Double] = HashMap[Vector2D, Double]()
 
+  def this(vertices: List[Vector2D]) = {
+    this()
+    vertices.foreach(this.vertices += _)
+  }
 
   def +(vector2D: Vector2D): Unit = this.vertices += vector2D
 

@@ -1,14 +1,21 @@
+import GameActionType.GameActionType
+import UIActionType.UIActionType
 import javafx.beans.value.{ChangeListener, ObservableValue}
-import javafx.event.{Event, EventHandler}
-import javafx.geometry.{Insets, Orientation, Pos}
-import javafx.scene.control.{Button, ChoiceBox, RadioButton, TextField, TextFormatter, ToggleGroup}
-import javafx.scene.input.MouseEvent
-import javafx.scene.layout.{FlowPane, Pane, VBox}
+import javafx.event.Event
+import javafx.geometry.{Insets, Pos}
+import javafx.scene.control._
+import javafx.scene.layout.{FlowPane, VBox}
 import javafx.scene.paint.Color
 import javafx.scene.text.{Font, Text, TextAlignment}
+import javafx.stage.FileChooser
 import scalafx.util.converter.DoubleStringConverter
 
-class SidePane(val width:Int,val height:Int, var game: Game, var boardPane: BoardPane) extends FlowPane {
+object UIActionType extends Enumeration {
+  type UIActionType = Value
+  val Pause, Resume, Reset, AddingVertex, AddingStartingPoint, PresetLoaded = Value
+}
+
+class SidePane(val width: Int, val height: Int, var game: Game, var boardPane: BoardPane) extends FlowPane with Subject[SidePane, UIActionType] {
   var buttonBar = new VBox()
   var optionsBar = new VBox()
   var vertexInfo = new VBox()
@@ -17,6 +24,7 @@ class SidePane(val width:Int,val height:Int, var game: Game, var boardPane: Boar
   var numOfPoints = 0
 
   var pauseButton = new Button()
+  var preset: Option[Preset] = None
 
   var editedVertex: Option[Vector2D] = None
   this.setPadding(new Insets(20,0,0,30))
@@ -46,24 +54,24 @@ class SidePane(val width:Int,val height:Int, var game: Game, var boardPane: Boar
   this.getChildren.add(this.wrapper)
 
   this.addPauseButton(game.isPaused)
-  this.addResetButton
-  this.addOptionButton("Sierpinsky")
-  this.addOptionButton("Rectangular")
-  this.addOptionButton("Pentagon")
-  this.addOptionButton("Vicsek")
-  this.addOptionButton("Carpet")
-  this.addOwnOptions
-  this.addAngleOption
-  this.addVertexInfo
-  this.addDrawRadioButtons
+  this.addResetButton()
+  this.addOptionButton("Load preset")
+//  this.addOptionButton("Rectangular")
+//  this.addOptionButton("Pentagon")
+//  this.addOptionButton("Vicsek")
+//  this.addOptionButton("Carpet")
+  this.addOwnOptions()
+  this.addAngleOption()
+  this.addVertexInfo()
+  this.addDrawRadioButtons()
 
-  def addAngleOption: Unit ={
+  def addAngleOption(): Unit ={
     val button = new Button("Add angles")
 
     button.setOnMouseClicked(event =>{
-        if(numOfPoints < game.gameVectors.vertices.length){
-          numOfPoints = game.gameVectors.vertices.length
-          this.addTableRow(game.gameVectors.vertices.last)
+      if(numOfPoints < game.gameVectors.vertices.length) {
+        numOfPoints = game.gameVectors.vertices.length
+        this.addTableRow(game.gameVectors.vertices.last)
       }
     })
 
@@ -82,7 +90,7 @@ class SidePane(val width:Int,val height:Int, var game: Game, var boardPane: Boar
       override def changed(observableValue: ObservableValue[_ <: Double], t: Double, t1: Double): Unit = {
         game.addAngle(vector,t1)
       }
-      })
+    })
     this.optionsBar.getChildren.add(text)
     this.optionsBar.getChildren.add(textField)
   }
@@ -96,7 +104,7 @@ class SidePane(val width:Int,val height:Int, var game: Game, var boardPane: Boar
     this.wrapper.getChildren.add(textLabel)
   }
 
-  def addOwnOptions: Unit ={
+  def addOwnOptions(): Unit = {
     val button = new Button("Set multiplier")
     button.getStyleClass.add("button-raised")
 
@@ -123,43 +131,33 @@ class SidePane(val width:Int,val height:Int, var game: Game, var boardPane: Boar
   }
 
   def pauseButtonAction(): Unit = {
-    if(this.pauseButton.getText.equals("Pause")){
+    if (this.pauseButton.getText.equals("Pause")) {
       this.pauseButton.setText("Resume")
-      game.isPaused=true
+      notifyObservers(UIActionType.Pause)
     }
-    else{
-      if(game.gameVectors.vertices.nonEmpty){
-        this.pauseButton.setText("Pause")
-        game.isPaused=false
-      }
+    else if (game.gameVectors.vertices.nonEmpty) {
+      this.pauseButton.setText("Pause")
+      notifyObservers(UIActionType.Resume)
     }
   }
 
   def addPauseButton(isPaused: Boolean): Unit = {
-    this.pauseButton.setText("Pause")
-    if(isPaused){
-      this.pauseButton.setText("Resume")
-    }
+    this.pauseButton.setText(if(isPaused) "Resume" else "Pause")
     this.pauseButton.getStyleClass.add("button-raised")
-
-    this.pauseButton.setOnMouseClicked(_=>{
-      this.pauseButtonAction()
-    }
-    )
+    this.pauseButton.setOnMouseClicked(_ => this.pauseButtonAction())
     this.buttonBar.getChildren.add(this.pauseButton)
   }
 
-  def addResetButton: Unit ={
+  def addResetButton(): Unit = {
     val button = new Button("Reset")
     button.getStyleClass.add("button-raised")
 
-    button.setOnMouseClicked(_=>{
-      this.game.cleanGame()
-      this.boardPane.canvas.getGraphicsContext2D.clearRect(0,0,this.boardPane.canvas.getWidth,this.boardPane.canvas.getHeight)
+    button.setOnMouseClicked(_ => {
       this.optionsBar.getChildren.clear()
-      this.boardPane.canWrite=true
-      this.numOfPoints=0
+      this.numOfPoints = 0
+      notifyObservers(UIActionType.Reset)
     })
+
     this.buttonBar.getChildren.add(button)
   }
 
@@ -167,12 +165,20 @@ class SidePane(val width:Int,val height:Int, var game: Game, var boardPane: Boar
     val button = new Button(text)
     button.getStyleClass.add("button-raised")
 
-    button.setOnMouseClicked(event => {
-      val preset = new Presets(text, this.boardPane.width, this.boardPane.height)
-      this.game.startWithNew(preset.initialParameters._2, preset.initialParameters._1, preset.initialParameters._3)
-      this.game.setStartingPoint(Vector2D(this.boardPane.width/2,this.boardPane.height/2))
-      if(this.game.isPaused) this.pauseButtonAction()
-      this.boardPane.canWrite = false
+    button.setOnMouseClicked(_ => {
+      val fileChooser = new FileChooser()
+      fileChooser.getExtensionFilters.add(new FileChooser.ExtensionFilter("json files (*.json)", "*.json"))
+      val file = fileChooser.showOpenDialog(null)
+      println(file.getAbsolutePath)
+
+      val preset = Presets.loadPresetFromJSON(file.getAbsolutePath)
+      preset match {
+        case Some(preset) =>
+          this.preset = Some(preset)
+          notifyObservers(UIActionType.PresetLoaded)
+          if(this.game.isPaused) this.pauseButtonAction()
+        case None => println("Cannot load preset")
+      }
     })
 
     this.buttonBar.getChildren.add(button)
@@ -185,7 +191,7 @@ class SidePane(val width:Int,val height:Int, var game: Game, var boardPane: Boar
     }
   }
 
-  def addVertexInfo: Unit = {
+  def addVertexInfo(): Unit = {
     vertexChoiceBox.onActionProperty().setValue((t: Event) => {
       editedVertex = Some(t.getTarget.asInstanceOf[ChoiceBox[Vector2D]].getValue)
     })
@@ -193,24 +199,28 @@ class SidePane(val width:Int,val height:Int, var game: Game, var boardPane: Boar
     this.vertexInfo.getChildren.add(vertexChoiceBox)
   }
 
-
-  def addDrawRadioButtons: Unit = {
+  def addDrawRadioButtons(): Unit = {
     val rbGroup = new ToggleGroup()
 
     val startingPointButton = new RadioButton("Adding starting point")
     startingPointButton.setToggleGroup(rbGroup)
-    startingPointButton.setOnMouseClicked(event =>{
-      this.game.addingStartingPoint = !this.game.addingStartingPoint
+    startingPointButton.setOnMouseClicked(_ => {
+      this.notifyObservers(UIActionType.AddingStartingPoint)
     })
 
     val vertexButton = new RadioButton("Adding vertex")
     vertexButton.setToggleGroup(rbGroup)
-    vertexButton.setSelected(this.game.addingStartingPoint)
-    vertexButton.setOnMouseClicked(event =>{
-      this.game.addingStartingPoint = !this.game.addingStartingPoint
+    vertexButton.setOnMouseClicked(_ => {
+      this.notifyObservers(UIActionType.AddingVertex)
     })
 
+    vertexButton.setSelected(true)
     this.buttonBar.getChildren.add(startingPointButton)
     this.buttonBar.getChildren.add(vertexButton)
+  }
+
+  def receiveUpdate(game: Game, actionType: GameActionType): Unit = actionType match {
+    case GameActionType.PointAdded => this.updateVertexChoiceBox()
+    case GameActionType.NextStep =>
   }
 }

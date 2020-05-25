@@ -23,3 +23,11 @@ val javaFXModules = Seq("base", "controls", "fxml", "graphics", "media", "swing"
 libraryDependencies ++= javaFXModules.map(m =>
   "org.openjfx" % s"javafx-$m" % "11" classifier osName
 )
+
+val circeVersion = "0.13.0"
+
+libraryDependencies ++= Seq(
+  "io.circe"  %% "circe-core"     % circeVersion,
+  "io.circe"  %% "circe-generic"  % circeVersion,
+  "io.circe"  %% "circe-parser"   % circeVersion
+)

@@ -1,5 +1,4 @@
 class Vector2D private(val x: Int, val y: Int) {
-
   def +(other: Vector2D) = Vector2D(x + other.x, y + other.y)
 
   def unary_- = Vector2D(-x, -y)
