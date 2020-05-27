@@ -1,6 +1,7 @@
 import scala.collection.mutable.ListBuffer
 import io.circe.parser._
 import io.circe.generic.auto._
+import io.circe.syntax._
 
 case class InitialVector(x: Double, y: Double)
 case class Preset(name: String, initialVectors: List[InitialVector], multiplier: Double, canReselectVertex: Boolean)
@@ -30,6 +31,7 @@ case class Preset(name: String, initialVectors: List[InitialVector], multiplier:
 //                (0.66,vectors,true)
 //        }
 //    }
+//}
 
 object Presets {
   def loadPresetFromJSON(filePath: String): Option[Preset] = {
@@ -47,7 +49,6 @@ object Presets {
             println("Preset with name " + preset.name + " loaded successfully!")
             Some(preset)
         }
-
       } finally {
         source.close()
       }
@@ -56,5 +57,10 @@ object Presets {
         println(ex.getMessage)
         None
     }
+  }
+
+  def savePresetToJSON(filePath: String, name: String, initialVectors: List[InitialVector], multiplier: Double, canReselectVertex: Boolean): Unit = {
+    val jsonPreset = Preset(name, initialVectors, multiplier, canReselectVertex).asJson
+    reflect.io.File(filePath).writeAll(jsonPreset.toString())
   }
 }

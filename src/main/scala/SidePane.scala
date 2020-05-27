@@ -15,7 +15,7 @@ object UIActionType extends Enumeration {
   val Pause, Resume, Reset, AddingVertex, AddingStartingPoint, PresetLoaded = Value
 }
 
-class SidePane(val width: Int, val height: Int, var game: Game, var boardPane: BoardPane) extends FlowPane with Subject[SidePane, UIActionType] {
+class SidePane(val width: Int, val height: Int, var game: Game) extends FlowPane with Subject[SidePane, UIActionType] {
   var buttonBar = new VBox()
   var optionsBar = new VBox()
   var vertexInfo = new VBox()
@@ -55,12 +55,9 @@ class SidePane(val width: Int, val height: Int, var game: Game, var boardPane: B
 
   this.addPauseButton(game.isPaused)
   this.addResetButton()
-  this.addOptionButton("Load preset")
-//  this.addOptionButton("Rectangular")
-//  this.addOptionButton("Pentagon")
-//  this.addOptionButton("Vicsek")
-//  this.addOptionButton("Carpet")
-  this.addOwnOptions()
+  this.addLoadPresetButton()
+  this.addSavePresetButton()
+//  this.addOwnOptions()
   this.addAngleOption()
   this.addVertexInfo()
   this.addDrawRadioButtons()
@@ -104,31 +101,30 @@ class SidePane(val width: Int, val height: Int, var game: Game, var boardPane: B
     this.wrapper.getChildren.add(textLabel)
   }
 
-  def addOwnOptions(): Unit = {
-    val button = new Button("Set multiplier")
-    button.getStyleClass.add("button-raised")
-
-    button.setOnMouseClicked(event=> {
-      val textFormatter = new TextFormatter[Double](new DoubleStringConverter(),0d)
-      val textField = new TextField()
-      textField.setTextFormatter(textFormatter)
-
-      textFormatter.valueProperty().addListener(new ChangeListener[Double] {
-        override def changed(observableValue: ObservableValue[_ <: Double], t: Double, t1: Double): Unit = {
-          if(!t1.equals(0.0) && game.gameVectors.vertices.nonEmpty){
-            game.isPaused = false
-            boardPane.canWrite = false
-          }
-        }
-      })
-      var text = new Text("Set multiplier")
-      this.optionsBar.getChildren.add(text)
-      this.optionsBar.getChildren.add(textField)
-
-    }
-    )
-    this.buttonBar.getChildren.add(button)
-  }
+//  needs refactoring
+//  def addOwnOptions(): Unit = {
+//    val button = new Button("Set multiplier")
+//    button.getStyleClass.add("button-raised")
+//
+//    button.setOnMouseClicked(event => {
+//      val textFormatter = new TextFormatter[Double](new DoubleStringConverter(),0d)
+//      val textField = new TextField()
+//      textField.setTextFormatter(textFormatter)
+//
+//      textFormatter.valueProperty().addListener(new ChangeListener[Double] {
+//        override def changed(observableValue: ObservableValue[_ <: Double], t: Double, t1: Double): Unit = {
+//          if(!t1.equals(0.0) && game.gameVectors.vertices.nonEmpty){
+//            game.isPaused = false
+//            boardPane.canWrite = false
+//          }
+//        }
+//      })
+//
+//      val text = new Text("Set multiplier")
+//      this.optionsBar.getChildren.addAll(text, textField)
+//    })
+//    this.buttonBar.getChildren.add(button)
+//  }
 
   def pauseButtonAction(): Unit = {
     if (this.pauseButton.getText.equals("Pause")) {
@@ -161,15 +157,14 @@ class SidePane(val width: Int, val height: Int, var game: Game, var boardPane: B
     this.buttonBar.getChildren.add(button)
   }
 
-  def addOptionButton(text: String): Unit = {
-    val button = new Button(text)
+  def addLoadPresetButton(): Unit = {
+    val button = new Button("Load preset")
     button.getStyleClass.add("button-raised")
 
     button.setOnMouseClicked(_ => {
       val fileChooser = new FileChooser()
       fileChooser.getExtensionFilters.add(new FileChooser.ExtensionFilter("json files (*.json)", "*.json"))
       val file = fileChooser.showOpenDialog(null)
-      println(file.getAbsolutePath)
 
       val preset = Presets.loadPresetFromJSON(file.getAbsolutePath)
       preset match {
@@ -179,6 +174,21 @@ class SidePane(val width: Int, val height: Int, var game: Game, var boardPane: B
           if(this.game.isPaused) this.pauseButtonAction()
         case None => println("Cannot load preset")
       }
+    })
+
+    this.buttonBar.getChildren.add(button)
+  }
+
+  def addSavePresetButton(): Unit = {
+    val button = new Button("Save preset")
+    button.getStyleClass.add("button-raised")
+
+    button.setOnMouseClicked(_ => {
+      val fileChooser = new FileChooser()
+      fileChooser.getExtensionFilters.add(new FileChooser.ExtensionFilter("json files (*.json)", "*.json"))
+      val file = fileChooser.showSaveDialog(null)
+
+      Presets.savePresetToJSON(file.getAbsolutePath, file.getName, game.getInitialVectorsPreset, game.getMultiplier, game.canReselectVertex)
     })
 
     this.buttonBar.getChildren.add(button)

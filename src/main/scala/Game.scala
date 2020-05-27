@@ -48,9 +48,15 @@ class Game(val boardWidth: Int, val boardHeight: Int) extends Subject[Game, Game
     this.setCanReselectVertex(canReselectVertex)
   }
 
-  def setMultiplier(newMultiplier: Double):Unit = this.gameVectors.multiplier = newMultiplier
+  def getMultiplier: Double = this.gameVectors.multiplier
+
+  def setMultiplier(newMultiplier: Double): Unit = this.gameVectors.multiplier = newMultiplier
 
   def addAngle(point: Vector2D, angle: Double): Unit = this.gameVectors.addAngle(point, angle)
+
+  def getInitialVectorsPreset: List[InitialVector] = {
+    this.getInitialPoints.map(vector => InitialVector(vector.x.toDouble / boardWidth, vector.y.toDouble / boardHeight))
+  }
 
   import UIActionType._
 
@@ -64,6 +70,6 @@ class Game(val boardWidth: Int, val boardHeight: Int) extends Subject[Game, Game
       val preset = sidePane.preset.get
       val initialVectors = preset.initialVectors.map(vector => Vector2D((vector.x * boardWidth).toInt, (vector.y * boardHeight).toInt))
       this.startWithNew(new GameVectors(initialVectors), preset.multiplier, preset.canReselectVertex)
-      this.setStartingPoint(Vector2D(boardWidth, boardHeight))
+      this.setStartingPoint(Vector2D(boardWidth / 2, boardHeight / 2))
   }
 }

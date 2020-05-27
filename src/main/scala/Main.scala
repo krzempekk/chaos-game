@@ -15,7 +15,7 @@ class Main extends javafx.application.Application {
   val boardHeight = 800
   val game = new Game(boardWidth, boardHeight)
   val boardPane = new BoardPane(boardWidth, boardHeight, game)
-  val sidePane = new SidePane(sidebarWidth, boardHeight, game, boardPane)
+  val sidePane = new SidePane(sidebarWidth, boardHeight, game)
 
   game.addObserver(boardPane.receiveUpdate)
   game.addObserver(sidePane.receiveUpdate)
