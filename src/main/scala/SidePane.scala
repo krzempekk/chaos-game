@@ -103,7 +103,6 @@ class SidePane(val width: Int, val height: Int, val game: Game) extends FlowPane
     this.wrapper.getChildren.add(textLabel)
   }
 
-//  needs refactoring
   def addMultiplierButton(): Unit = {
     val button = new Button("Set multiplier")
     button.getStyleClass.add("button-raised")
