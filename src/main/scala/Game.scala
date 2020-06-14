@@ -35,6 +35,7 @@ class Game(val boardWidth: Int, val boardHeight: Int) extends Subject[Game, Game
   def cleanGame(): Unit = {
     gameVectors.clear()
     this.isPaused = true
+    setMultiplier(0.5)
   }
 
   def getInitialPoints: List[Vector2D] = gameVectors.getInitialList

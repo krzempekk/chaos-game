@@ -17,7 +17,7 @@ object UIActionType extends Enumeration {
   val Pause, Resume, Reset, AddingVertex, AddingStartingPoint, PresetLoaded, WrongMultiplier = Value
 }
 
-class SidePane(val width: Int, val height: Int, var game: Game) extends FlowPane with Subject[SidePane, UIActionType] {
+class SidePane(val width: Int, val height: Int, val game: Game) extends FlowPane with Subject[SidePane, UIActionType] {
   var buttonBar = new VBox()
   var optionsBar = new VBox()
   var vertexInfo = new VBox()
@@ -59,7 +59,7 @@ class SidePane(val width: Int, val height: Int, var game: Game) extends FlowPane
   this.addResetButton()
   this.addLoadPresetButton()
   this.addSavePresetButton()
-  //this.addMultiplierButton()
+  this.addMultiplierButton()
   this.addAngleOption()
   this.addVertexInfo()
   this.addDrawRadioButtons()
@@ -104,11 +104,11 @@ class SidePane(val width: Int, val height: Int, var game: Game) extends FlowPane
   }
 
 //  needs refactoring
-  /*def addMultiplierButton(): Unit = {
+  def addMultiplierButton(): Unit = {
     val button = new Button("Set multiplier")
     button.getStyleClass.add("button-raised")
 
-    button.setOnMouseClicked(event => {
+    button.setOnMouseClicked(_ => {
       val textFormatter = new TextFormatter[Double](new DoubleStringConverter(),0d)
       val textField = new TextField()
       textField.setTextFormatter(textFormatter)
@@ -119,7 +119,7 @@ class SidePane(val width: Int, val height: Int, var game: Game) extends FlowPane
             notifyObservers(UIActionType.WrongMultiplier)
           }
           else {
-            game.gameVectors.multiplier = t1
+            game.setMultiplier(t1)
           }
         }
       })
@@ -127,8 +127,9 @@ class SidePane(val width: Int, val height: Int, var game: Game) extends FlowPane
       val text = new Text("Set multiplier")
       this.optionsBar.getChildren.addAll(text, textField)
     })
+
     this.buttonBar.getChildren.add(button)
-  }*/
+  }
 
   def pauseButtonAction(): Unit = {
     if (this.pauseButton.getText.equals("Pause")) {
