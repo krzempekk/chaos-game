@@ -67,6 +67,7 @@ class BoardPane(val width: Int, val height: Int, val game: Game) extends Pane {
   def receiveUpdate(sidePane: SidePane, actionType: UIActionType): Unit = actionType match {
     case Reset => this.reset()
     case PresetLoaded => this.canWrite = false
+    case WrongMultiplier => this.canWrite = false
     case _ =>
   }
 

@@ -1,3 +1,5 @@
+import java.io.File
+
 import GameActionType.GameActionType
 import UIActionType.UIActionType
 import javafx.beans.value.{ChangeListener, ObservableValue}
@@ -12,7 +14,7 @@ import scalafx.util.converter.DoubleStringConverter
 
 object UIActionType extends Enumeration {
   type UIActionType = Value
-  val Pause, Resume, Reset, AddingVertex, AddingStartingPoint, PresetLoaded = Value
+  val Pause, Resume, Reset, AddingVertex, AddingStartingPoint, PresetLoaded, WrongMultiplier = Value
 }
 
 class SidePane(val width: Int, val height: Int, var game: Game) extends FlowPane with Subject[SidePane, UIActionType] {
@@ -57,7 +59,7 @@ class SidePane(val width: Int, val height: Int, var game: Game) extends FlowPane
   this.addResetButton()
   this.addLoadPresetButton()
   this.addSavePresetButton()
-//  this.addOwnOptions()
+  //this.addMultiplierButton()
   this.addAngleOption()
   this.addVertexInfo()
   this.addDrawRadioButtons()
@@ -102,33 +104,35 @@ class SidePane(val width: Int, val height: Int, var game: Game) extends FlowPane
   }
 
 //  needs refactoring
-//  def addOwnOptions(): Unit = {
-//    val button = new Button("Set multiplier")
-//    button.getStyleClass.add("button-raised")
-//
-//    button.setOnMouseClicked(event => {
-//      val textFormatter = new TextFormatter[Double](new DoubleStringConverter(),0d)
-//      val textField = new TextField()
-//      textField.setTextFormatter(textFormatter)
-//
-//      textFormatter.valueProperty().addListener(new ChangeListener[Double] {
-//        override def changed(observableValue: ObservableValue[_ <: Double], t: Double, t1: Double): Unit = {
-//          if(!t1.equals(0.0) && game.gameVectors.vertices.nonEmpty){
-//            game.isPaused = false
-//            boardPane.canWrite = false
-//          }
-//        }
-//      })
-//
-//      val text = new Text("Set multiplier")
-//      this.optionsBar.getChildren.addAll(text, textField)
-//    })
-//    this.buttonBar.getChildren.add(button)
-//  }
+  /*def addMultiplierButton(): Unit = {
+    val button = new Button("Set multiplier")
+    button.getStyleClass.add("button-raised")
+
+    button.setOnMouseClicked(event => {
+      val textFormatter = new TextFormatter[Double](new DoubleStringConverter(),0d)
+      val textField = new TextField()
+      textField.setTextFormatter(textFormatter)
+
+      textFormatter.valueProperty().addListener(new ChangeListener[Double] {
+        override def changed(observableValue: ObservableValue[_ <: Double], t: Double, t1: Double): Unit = {
+          if(!t1.equals(0.0) && game.gameVectors.vertices.nonEmpty) {
+            notifyObservers(UIActionType.WrongMultiplier)
+          }
+          else {
+            game.gameVectors.multiplier = t1
+          }
+        }
+      })
+
+      val text = new Text("Set multiplier")
+      this.optionsBar.getChildren.addAll(text, textField)
+    })
+    this.buttonBar.getChildren.add(button)
+  }*/
 
   def pauseButtonAction(): Unit = {
     if (this.pauseButton.getText.equals("Pause")) {
-      this.pauseButton.setText("Resume")
+      this.pauseButton.setText("Start")
       notifyObservers(UIActionType.Pause)
     }
     else if (game.gameVectors.vertices.nonEmpty) {
@@ -138,7 +142,7 @@ class SidePane(val width: Int, val height: Int, var game: Game) extends FlowPane
   }
 
   def addPauseButton(isPaused: Boolean): Unit = {
-    this.pauseButton.setText(if(isPaused) "Resume" else "Pause")
+    this.pauseButton.setText(if(isPaused) "Start" else "Pause")
     this.pauseButton.getStyleClass.add("button-raised")
     this.pauseButton.setOnMouseClicked(_ => this.pauseButtonAction())
     this.buttonBar.getChildren.add(this.pauseButton)
@@ -152,9 +156,16 @@ class SidePane(val width: Int, val height: Int, var game: Game) extends FlowPane
       this.optionsBar.getChildren.clear()
       this.numOfPoints = 0
       notifyObservers(UIActionType.Reset)
+      this.pauseButton.setText("Start")
     })
 
     this.buttonBar.getChildren.add(button)
+  }
+
+  private def chooseFile(): File = {
+    val fileChooser = new FileChooser()
+    fileChooser.getExtensionFilters.add(new FileChooser.ExtensionFilter("json files (*.json)", "*.json"))
+    fileChooser.showOpenDialog(null)
   }
 
   def addLoadPresetButton(): Unit = {
@@ -162,10 +173,7 @@ class SidePane(val width: Int, val height: Int, var game: Game) extends FlowPane
     button.getStyleClass.add("button-raised")
 
     button.setOnMouseClicked(_ => {
-      val fileChooser = new FileChooser()
-      fileChooser.getExtensionFilters.add(new FileChooser.ExtensionFilter("json files (*.json)", "*.json"))
-      val file = fileChooser.showOpenDialog(null)
-
+      val file = chooseFile()
       val preset = Presets.loadPresetFromJSON(file.getAbsolutePath)
       preset match {
         case Some(preset) =>
@@ -184,9 +192,7 @@ class SidePane(val width: Int, val height: Int, var game: Game) extends FlowPane
     button.getStyleClass.add("button-raised")
 
     button.setOnMouseClicked(_ => {
-      val fileChooser = new FileChooser()
-      fileChooser.getExtensionFilters.add(new FileChooser.ExtensionFilter("json files (*.json)", "*.json"))
-      val file = fileChooser.showSaveDialog(null)
+      val file = chooseFile()
 
       Presets.savePresetToJSON(file.getAbsolutePath, file.getName, game.getInitialVectorsPreset, game.getMultiplier, game.canReselectVertex)
     })

@@ -66,6 +66,7 @@ class Game(val boardWidth: Int, val boardHeight: Int) extends Subject[Game, Game
     case Reset => this.cleanGame()
     case AddingVertex => this.addingStartingPoint = false
     case AddingStartingPoint => this.addingStartingPoint = true
+    case WrongMultiplier => this.isPaused = true
     case PresetLoaded =>
       val preset = sidePane.preset.get
       val initialVectors = preset.initialVectors.map(vector => Vector2D((vector.x * boardWidth).toInt, (vector.y * boardHeight).toInt))
