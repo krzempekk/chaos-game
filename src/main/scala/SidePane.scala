@@ -159,18 +159,14 @@ class SidePane(val width: Int, val height: Int, val game: Game) extends FlowPane
     this.buttonBar.getChildren.add(button)
   }
 
-  private def chooseFile(): File = {
-    val fileChooser = new FileChooser()
-    fileChooser.getExtensionFilters.add(new FileChooser.ExtensionFilter("json files (*.json)", "*.json"))
-    fileChooser.showOpenDialog(null)
-  }
-
   def addLoadPresetButton(): Unit = {
     val button = new Button("Load preset")
     button.getStyleClass.add("button-raised")
 
     button.setOnMouseClicked(_ => {
-      val file = chooseFile()
+      val fileChooser = new FileChooser()
+      fileChooser.getExtensionFilters.add(new FileChooser.ExtensionFilter("json files (*.json)", "*.json"))
+      val file = fileChooser.showOpenDialog(null)
       val preset = Presets.loadPresetFromJSON(file.getAbsolutePath)
       preset match {
         case Some(preset) =>
@@ -189,7 +185,9 @@ class SidePane(val width: Int, val height: Int, val game: Game) extends FlowPane
     button.getStyleClass.add("button-raised")
 
     button.setOnMouseClicked(_ => {
-      val file = chooseFile()
+      val fileChooser = new FileChooser()
+      fileChooser.getExtensionFilters.add(new FileChooser.ExtensionFilter("json files (*.json)", "*.json"))
+      val file = fileChooser.showSaveDialog(null)
 
       Presets.savePresetToJSON(file.getAbsolutePath, file.getName, game.getInitialVectorsPreset, game.getMultiplier, game.canReselectVertex)
     })
