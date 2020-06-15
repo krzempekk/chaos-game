@@ -14,7 +14,7 @@ import scalafx.util.converter.DoubleStringConverter
 
 object UIActionType extends Enumeration {
   type UIActionType = Value
-  val Pause, Resume, Reset, AddingVertex, AddingStartingPoint, PresetLoaded, WrongMultiplier = Value
+  val Pause, Resume, Reset, AddingVertex, AddingStartingPoint, PresetLoaded = Value
 }
 
 class SidePane(val width: Int, val height: Int, val game: Game) extends FlowPane with Subject[SidePane, UIActionType] {
@@ -31,7 +31,7 @@ class SidePane(val width: Int, val height: Int, val game: Game) extends FlowPane
   var editedVertex: Option[Vector2D] = None
   this.setPadding(new Insets(20,0,0,30))
 
-  this.addTextLabel("Choose one of prepared options", 15)
+  this.addTextLabel("Load prepared JSON preset", 15)
   this.addTextLabel("or pick few points by your own",15)
 
   buttonBar.prefWidthProperty().bind(this.prefWidthProperty())
@@ -67,7 +67,7 @@ class SidePane(val width: Int, val height: Int, val game: Game) extends FlowPane
   def addAngleOption(): Unit ={
     val button = new Button("Add angles")
 
-    button.setOnMouseClicked(event =>{
+    button.setOnMouseClicked(_ =>{
       if(numOfPoints < game.gameVectors.vertices.length) {
         numOfPoints = game.gameVectors.vertices.length
         this.addTableRow(game.gameVectors.vertices.last)
@@ -115,9 +115,6 @@ class SidePane(val width: Int, val height: Int, val game: Game) extends FlowPane
       textFormatter.valueProperty().addListener(new ChangeListener[Double] {
         override def changed(observableValue: ObservableValue[_ <: Double], t: Double, t1: Double): Unit = {
           if(!t1.equals(0.0) && game.gameVectors.vertices.nonEmpty) {
-            notifyObservers(UIActionType.WrongMultiplier)
-          }
-          else {
             game.setMultiplier(t1)
           }
         }

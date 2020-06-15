@@ -48,7 +48,7 @@ class Main extends javafx.application.Application {
         while(true) {
           if(!game.isPaused){
             game.nextStep()
-            Thread.sleep(1000)}
+            Thread.sleep(1)}
           }
       }
     }
