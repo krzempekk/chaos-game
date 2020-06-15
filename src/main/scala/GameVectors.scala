@@ -43,7 +43,7 @@ class GameVectors(var canReselectVertex: Boolean = true) {
     val nextVertex = this.getRandomVertex
     var nextPoint = this.currentPoint.getNextVector(nextVertex, multiplier)
     if(this.anglesByVertices.contains(nextVertex)) {
-      nextPoint = (nextPoint - this.vertices(0)).rotate(this.anglesByVertices(nextVertex)) + this.vertices(0)
+      nextPoint = (nextPoint - nextVertex).rotate(this.anglesByVertices(nextVertex)) + nextVertex
     }
     this.generatedPoints.addOne(nextPoint)
     this.currentVertex = nextVertex
